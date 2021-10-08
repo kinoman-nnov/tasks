@@ -1,6 +1,8 @@
 import './css/style.css'
 import urls from './moduleUrls';
 
+const axios = require('axios');
+
 const loadButton = document.querySelector('#loadButton');
 const result = document.querySelector('.result');
 
@@ -41,6 +43,30 @@ function loadImage(url) {
   return promise;
 }
 
+function axiosInstance() { // пример использования библиотеки axios
+  axios.get('https://pokeapi.co/api/v2/pokemon/charmander')
+    .then(function (response) {
+      for (const elem of response.data.abilities) {
+        const header = document.createElement('h1');
+        result.appendChild(header);
+        header.style = 'color: blue';
+
+        header.textContent = elem.ability.name;
+      }
+      // handle success
+      return (response.data);
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    .then(function (response) {
+      
+      console.log(response)
+      // always executed
+    });
+}
+
 loadButton.addEventListener('click', function () {
 
   loadFileXML(urls[0]) // Загрузка файла с помощью асинхронного запроса XMLHttpRequest()
@@ -70,6 +96,7 @@ loadButton.addEventListener('click', function () {
     })
     .then(function () {
       console.log(`pic 3 load!`);
+      return axiosInstance();
     });
 
 });
