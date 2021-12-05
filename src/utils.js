@@ -4,7 +4,7 @@
 // import {valueOrDefault} from '../../dist/helpers.esm';
 
 // Adapted from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
-var _seed = Date.now();
+var _seed = Date.now(); // возвращает количество миллисекунд, прошедших с 1 января 1970 года 00:00:00 по UTC.
 
 export function srand(seed) {
   _seed = seed;
