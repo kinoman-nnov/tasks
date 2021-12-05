@@ -1,7 +1,6 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const conf = {
   entry: './src/index.js',
@@ -9,21 +8,21 @@ const conf = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
     clean: true,
-    // publicPath: 'dist/' //создать каталог внутри dist
+    // publicPath: 'dist/' // добавить каталог внутри dist
   },
   devServer: {
     static: {
       directory: path.join(__dirname, 'dist'),
     },
+    compress: true,
+    port: 9000,
     devMiddleware: {
-      // index: true,
-      // mimeTypes: { 'text/html': ['phtml'] },
-      // publicPath: '/publicPathForDevServe',
-      // serverSideRender: true,
+      index: true,
+      mimeTypes: { 'text/html': ['phtml'] },
+      publicPath: '/publicPathForDevServe',
+      serverSideRender: true,
       writeToDisk: true,
     },
-    compress: true,
-    port: 9000
   },
   module: {
     rules: [
@@ -48,17 +47,12 @@ const conf = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'main.css',
+      filename: "main.css"
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html'
     }),
-    new CopyPlugin({
-      patterns: [
-        { from: "src/data", to: "data" },
-      ],
-    }),
-  ],
+  ]
 }
 
 module.exports = conf;

@@ -1,99 +1,108 @@
 import './css/style.css';
-import urls from './moduleUrls';
-const axios = require('axios');
+import chart from './module';
 
-const loadButton = document.querySelector('#loadButton');
-const result = document.querySelector('.gallery');
 
-function axiosExample(url){
-  axios.get(url)
-  .then(function (response) {
-    // handle success
-    console.log(response);
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-  })
-  .then(function () {
-    const head = document.createElement('h1');
-      result.appendChild(head);
-      head.textContent = "GET запрос axios выполнен";
-    // always executed
-  });
+const frForm = document.querySelector('#myForm');
+const button = document.querySelector('#loadButton');
+const result = document.querySelector('#result');
+const chartContainer = document.querySelector('.chart-container');
+
+let arrayFr = []; // массив входных частот
+let startFr;  // нижняя частота
+let endFr;  // верхняя частота
+let dif;  // диапазон
+let frHeterodyne; // гетеродин
+let frIntermediate;	// массив ПЧ
+let combNumber; // комбинация верна
+let canvas; // дом-узел с графиком
+
+const n = [2, 3, 4];
+const m = [2, 3, 4];
+
+function getInputFrArray() {  // функция возвращает массив входных частот 
+
+  for (let i = 0; i < dif; i++) {
+    arrayFr.push(startFr);
+    startFr += 1;
+  }
+
+  return frIntermediate;
 }
 
-function loadFileXML(url) {
-  const heading = document.createElement('h1');
-  result.appendChild(heading);
-  const promise = new Promise(function (resolve) {
+function getFrIntermediateArray() {  // функция возвращает массив ПЧ в зависимости от частоты гетеродина 
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    xhr.send();
-    xhr.addEventListener('load', function () {
-
-      resolve([xhr.responseText, heading]); // передаю дополнительный параметр heading, с помощью массива
+  if (arrayFr[0] >= frHeterodyne) {
+    frIntermediate = arrayFr.map(function (num) {
+      return +(num - frHeterodyne).toFixed(1);
     });
+  } else {
+    frIntermediate = arrayFr.map(function (num) {
+      return +(frHeterodyne - num).toFixed(1);
+    }).reverse();
+  }
+
+  return frIntermediate;
+}
+
+function getCombinationFr() {	// ф-ция собирает в массивы комбинационные частоты 3-го порядка
+  let getCombObj = {};
+
+  let arrayComb = arrayFr.map(function (num) {
+    let combIII = ((2 * frHeterodyne) - num).toFixed(1);
+
+    return combIII;
   });
+  let arrayCombII = arrayFr.map(function (num) {
+    let combIII2 = ((2 * num) - frHeterodyne).toFixed(1);
 
-  return promise;
-}
-
-function loadFileFetch(url) {
-
-  const promise = fetch(url);
-
-  return promise;
-}
-
-function loadImage(url) {
-
-  const promise = new Promise(function (resolve) {
-    const img = document.createElement('img');
-    result.appendChild(img);
-    img.src = url;
-
-    img.addEventListener('load', function () {
-      resolve();
-    });
+    return combIII2;
   });
+  getCombObj.combFrIII = arrayComb;
+  getCombObj.combFrIII2 = arrayCombII;
 
-  return promise;
+  return getCombObj;
 }
 
-loadButton.addEventListener('click', function () {
-  loadFileXML(urls[0]) // загрузка файла c XMLHttpRequest()
-    .then(function (value) {
-      value[1].textContent = value[0] + '--->';
+button.addEventListener('click', function (event) {
+  event.preventDefault();
+  result.innerHTML = "";
+  arrayFr = [];
 
-      return loadFileFetch(urls[1]); // загрузка файла c fetch()
-    })
-    .then(function (response) {
-      return response.text();
-    })
-    .then(function (text) {
-      const heading = document.createElement('h1');
-      result.appendChild(heading);
-      heading.textContent = text;
+  if (chartContainer.contains(canvas)) {
+    canvas.remove()
+  }
 
-      return loadImage(urls[2]); // загрузка картинок
-    })
-    .then(function () {
-      console.log('pic 1 load')
-      return loadImage(urls[3]);
-    })
-    .then(function () {
-      console.log('pic 2 load')
-      return loadImage(urls[4]);
-    })
-    .then(function () {
-      console.log('pic 3 load')
-      return loadImage(urls[5]);
-    })
-    .then(function () {
-      console.log('pic 4 load');
-      return axiosExample(urls[6]);
-    });
+  startFr = Number(frForm.elements.inputStartF.value);	// нижняя входная F  
+  endFr = Number(frForm.elements.inputEndF.value);	// верхняя входная F
+  frHeterodyne = Number(frForm.elements.inputHeterodyne.value);	// гетеродин
+
+  dif = endFr - startFr + 1;
+
+  if ((dif > 0) && (dif !== 0)) {
+
+    getInputFrArray();
+
+    console.log("массив входных частот", arrayFr); // массив частот
+
+    let resultFrIntermediate = getFrIntermediateArray(arrayFr); console.log("массив ПЧ частот", resultFrIntermediate);
+    let resultCombinationFr = getCombinationFr(arrayFr); console.log("массивы комбинационных частот", resultCombinationFr);
+
+    const resultFr = document.createElement('div');
+    result.appendChild(resultFr);
+    resultFr.textContent = `Массив входных частот [${arrayFr}]`;
+
+    const resultFrInter = document.createElement('div');
+    result.appendChild(resultFrInter);
+    resultFrInter.textContent = `Массив ПЧ частот [${resultFrIntermediate}]`;
+
+    const resultFrComb = document.createElement('div');
+    result.appendChild(resultFrComb);
+    resultFrComb.textContent = `Массивы комбинационных частот 3го порядка[${resultCombinationFr.combFrIII}] и [${resultCombinationFr.combFrIII2}]`;
+
+    canvas = document.createElement('canvas');
+    chartContainer.appendChild(canvas);
+    canvas.classList.add('myChart');
+    
+    chart(arrayFr, resultFrIntermediate, resultCombinationFr)
+  }
 });
-
