@@ -10,14 +10,6 @@ export function srand(seed) {
   _seed = seed;
 }
 
-function valueOrDefault(min, max) {
-  var seed = this._seed;
-  min = min === undefined ? 0 : min;
-  max = max === undefined ? 1 : max;
-  this._seed = (seed * 9301 + 49297) % 233280;
-  return min + (this._seed / 233280) * (max - min);
-}
-
 export function rand(min, max) {
   min = valueOrDefault(min, 0);
   max = valueOrDefault(max, 0);
@@ -25,27 +17,43 @@ export function rand(min, max) {
   return min + (_seed / 233280) * (max - min);
 }
 
+// export function numbers(config) {
+//   var cfg = config || {};
+//   var min = valueOrDefault(cfg.min, 0);
+//   var max = valueOrDefault(cfg.max, 100);
+//   var from = valueOrDefault(cfg.from, []);
+//   var count = valueOrDefault(cfg.count, 8);
+//   var decimals = valueOrDefault(cfg.decimals, 8);
+//   var continuity = valueOrDefault(cfg.continuity, 1);
+//   var dfactor = Math.pow(10, decimals) || 0;
+//   var data = [];
+//   var i, value;
+
+//   for (i = 0; i < count; ++i) {
+//     value = (from[i] || 0) + this.rand(min, max);
+//     if (this.rand() <= continuity) {
+//       data.push(Math.round(dfactor * value) / dfactor);
+//     } else {
+//       data.push(null);
+//     }
+//   }
+
+//   return data;
+// }
 export function numbers(config) {
-  var cfg = config || {};
-  var min = valueOrDefault(cfg.min, 0);
-  var max = valueOrDefault(cfg.max, 100);
-  var from = valueOrDefault(cfg.from, []);
-  var count = valueOrDefault(cfg.count, 8);
-  var decimals = valueOrDefault(cfg.decimals, 8);
-  var continuity = valueOrDefault(cfg.continuity, 1);
-  var dfactor = Math.pow(10, decimals) || 0;
-  var data = [];
-  var i, value;
+  let cfg = config || {};
+  // let min = cfg.min;
+  // let max = cfg.max;
+  let count = cfg.count;
+  let data = [];
 
-  for (i = 0; i < count; ++i) {
-    value = (from[i] || 0) + this.rand(min, max);
-    if (this.rand() <= continuity) {
-      data.push(Math.round(dfactor * value) / dfactor);
-    } else {
-      data.push(null);
-    }
+  for (let i = - count; i < 0; i++) {
+      data.push(i);
   }
-
+  for (let i = 0; i <= count; i++) {
+      data.push(i);
+  }
+console.log(data);
   return data;
 }
 

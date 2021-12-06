@@ -1,3 +1,5 @@
+import { numbers } from "./utils"
+
 let createChart = (arrFr, frInter, frComb) => {
 
   const ctx = document.querySelector('.myChart');
@@ -9,13 +11,30 @@ let createChart = (arrFr, frInter, frComb) => {
   //   }
   //   return arrDiv;
   // }
+  const DATA_COUNT = 35;
+  const NUMBER_CFG = {
+    count: DATA_COUNT,
+    min: -100,
+    max: 100
+  };
 
   const config = {
     type: 'line',
     data: {
       labels: arrFr,
       datasets: [{
-        label: 'Dataset 1',
+        label: 'Input',
+        data: arrFr,
+        backgroundColor: [
+          'rgba(24, 30, 214, 0.2)',
+        ],
+        borderColor: [
+          'rgba(24, 30, 214, 1)',
+        ],
+        borderWidth: 2,
+      },
+      {
+        label: 'Inter',
         data: frInter,
         backgroundColor: [
           'rgba(255, 255, 255, 0.2)',
@@ -26,24 +45,13 @@ let createChart = (arrFr, frInter, frComb) => {
         borderWidth: 2,
       },
       {
-        label: 'Dataset 2',
-        data: arrFr,
+        label: 'Comb',
+        data: frComb.combFrIII,
         backgroundColor: [
           'rgba(217, 47, 47, 0.2)',
         ],
         borderColor: [
           'rgba(217, 47, 47, 1)',
-        ],
-        borderWidth: 2,
-      },
-      {
-        label: 'Dataset 3',
-        data: frComb.combFrIII,
-        backgroundColor: [
-          'rgba(24, 30, 214, 0.2)',
-        ],
-        borderColor: [
-          'rgba(24, 30, 214, 1)',
         ],
         borderWidth: 2,
       }]
