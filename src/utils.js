@@ -40,21 +40,47 @@ export function rand(min, max) {
 
 //   return data;
 // }
-export function numbers(config) {
+
+export function getLabels(config) {
   let cfg = config || {};
   // let min = cfg.min;
   // let max = cfg.max;
   let count = cfg.count;
-  let data = [];
+  let arr = [];
 
   for (let i = - count; i < 0; i++) {
-      data.push(i);
+    arr.push(i);
   }
   for (let i = 0; i <= count; i++) {
-      data.push(i);
+    arr.push(i);
   }
-console.log(data);
-  return data;
+
+  return arr;
+}
+
+export function getDataArr(arrLabels, arr) {
+  let arrInput = [];
+  let objElem = {};
+
+  for (let i = 0; i < arrLabels.length; i++) {
+    let filter = arr.find((item) => {
+      if (item === arrLabels[i]) {
+        return item;
+      }
+    });
+    
+    if (typeof filter === "number") {
+      objElem.x = arrLabels[i]; 
+      objElem.y = 10;
+      arrInput.push(objElem); console.log('arr',arrInput[i]);
+    } else {
+      objElem.x = arrLabels[i];
+      objElem.y = 0;
+      arrInput.push(objElem);
+    }
+  }
+
+  return arrInput;
 }
 
 export function points(config) {

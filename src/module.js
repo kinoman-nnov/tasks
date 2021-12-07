@@ -1,66 +1,77 @@
-import { numbers } from "./utils"
+import { getLabels, getDataArr } from "./utils"
 
 let createChart = (arrFr, frInter, frComb) => {
 
   const ctx = document.querySelector('.myChart');
 
-  // let createArrDiv = (num) => { // создает массив элементов со значениями равными количеству элементов 
-  //   let arrDiv = [];
-  //   for (let i = 0; i < num; i++) {
-  //     arrDiv.push(num);
-  //   }
-  //   return arrDiv;
-  // }
-  const DATA_COUNT = 35;
-  const NUMBER_CFG = {
-    count: DATA_COUNT,
+  const dataCount = 15; // задает значения по оси Х [-x, +x]
+  
+  const dataObj = {
+    count: dataCount,
     min: -100,
     max: 100
   };
 
+  const coordsX = getLabels(dataObj); // коор - ты по оси Х
+  const dataInput = getDataArr(coordsX, arrFr);
+  console.log('labels', coordsX);
+  console.log('input', dataInput);
+
+  const data = {
+    labels: coordsX,
+    datasets: [{
+      label: 'Input',
+      data: dataInput,
+      backgroundColor: [
+        'rgba(24, 30, 214, 0.2)',
+      ],
+      borderColor: [
+        'rgba(24, 30, 214, 1)',
+      ],
+      borderWidth: 2,
+      stack: 'combined',
+    },
+    {
+      label: 'Inter',
+      data: getDataArr(coordsX, frInter),
+      backgroundColor: [
+        'rgba(255, 255, 255, 0.2)',
+      ],
+      borderColor: [
+        'rgba(0, 0, 0, 0.5)',
+      ],
+      borderWidth: 2,
+      stack: 'combined',
+    },
+    {
+      label: 'Comb',
+      data: getDataArr(coordsX, frComb.combFrIII),
+      backgroundColor: [
+        'rgba(217, 47, 47, 0.2)',
+      ],
+      borderColor: [
+        'rgba(217, 47, 47, 1)',
+      ],
+      borderWidth: 2,
+      stack: 'combined',
+    }]
+  }
+
   const config = {
     type: 'line',
-    data: {
-      labels: arrFr,
-      datasets: [{
-        label: 'Input',
-        data: arrFr,
-        backgroundColor: [
-          'rgba(24, 30, 214, 0.2)',
-        ],
-        borderColor: [
-          'rgba(24, 30, 214, 1)',
-        ],
-        borderWidth: 2,
-      },
-      {
-        label: 'Inter',
-        data: frInter,
-        backgroundColor: [
-          'rgba(255, 255, 255, 0.2)',
-        ],
-        borderColor: [
-          'rgba(0, 0, 0, 0.5)',
-        ],
-        borderWidth: 2,
-      },
-      {
-        label: 'Comb',
-        data: frComb.combFrIII,
-        backgroundColor: [
-          'rgba(217, 47, 47, 0.2)',
-        ],
-        borderColor: [
-          'rgba(217, 47, 47, 1)',
-        ],
-        borderWidth: 2,
-      }]
-    },
+    data: data,
     options: {
       responsive: true,
       scales: {
+        x: {
+          type: 'linear',
+          display: true,
+          // position: 'center',
+        },
         y: {
-          beginAtZero: true
+          type: 'linear',
+          display: true,
+          position: 'center',
         }
       },
       plugins: {
@@ -72,7 +83,7 @@ let createChart = (arrFr, frInter, frComb) => {
     }
   };
 
-  const myChart = new Chart(
+  new Chart(
     ctx,
     config
   );

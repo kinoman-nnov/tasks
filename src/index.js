@@ -50,14 +50,14 @@ function getCombinationFr() {	// ф-ция собирает в массивы к
   let arrayComb = arrayFr.map(function (num) {
     let combIII = ((2 * frHeterodyne) - num).toFixed(1);
 
-    return combIII;
+    return +combIII;
   });
   let arrayCombII = arrayFr.map(function (num) {
     let combIII2 = ((2 * num) - frHeterodyne).toFixed(1);
 
-    return combIII2;
+    return +combIII2;
   });
-  getCombObj.combFrIII = arrayComb;
+  getCombObj.combFrIII = arrayComb.reverse();
   getCombObj.combFrIII2 = arrayCombII;
 
   return getCombObj;
@@ -84,8 +84,8 @@ button.addEventListener('click', function (event) {
 
     console.log("массив входных частот", arrayFr); // массив частот
 
-    let resultFrIntermediate = getFrIntermediateArray(arrayFr); console.log("массив ПЧ частот", resultFrIntermediate);
-    let resultCombinationFr = getCombinationFr(arrayFr); console.log("массивы комбинационных частот", resultCombinationFr);
+    let resultFrIntermediate = getFrIntermediateArray(); console.log("массив ПЧ частот", resultFrIntermediate);
+    let resultCombinationFr = getCombinationFr(); console.log("массивы комбинационных частот", resultCombinationFr);
 
     const resultFr = document.createElement('div');
     result.appendChild(resultFr);
