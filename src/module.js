@@ -4,7 +4,7 @@ let createChart = (arrFr, frInter, frComb) => {
 
   const ctx = document.querySelector('.myChart');
 
-  const dataCount = 15; // задает значения по оси Х [-x, +x]
+  const dataCount = 15; // задает max значения по оси Х [-x, +x]
   
   const dataObj = {
     count: dataCount,
@@ -13,10 +13,11 @@ let createChart = (arrFr, frInter, frComb) => {
   };
 
   const coordsX = getLabels(dataObj); // коор - ты по оси Х
-  const dataInput = getDataArr(coordsX, arrFr);
-  console.log('labels', coordsX);
-  console.log('input', dataInput);
-
+  const dataInput = getDataArr(coordsX, arrFr); // массив объектов с коор - тами входных чвстот
+  const dataInter = getDataArr(coordsX, frInter); // массив объектов с коор - тами ПЧ чвстот
+  const dataCombIII = getDataArr(coordsX, frComb.combFrIII); // массив объектов с коор - тами комбинационных чвстот
+  // const dataCombIII2 = getDataArr(coordsX, frComb.combFrIII2); // массив объектов с коор - тами комбинационных чвстот
+console.log(dataCombIII2);
   const data = {
     labels: coordsX,
     datasets: [{
@@ -33,7 +34,7 @@ let createChart = (arrFr, frInter, frComb) => {
     },
     {
       label: 'Inter',
-      data: getDataArr(coordsX, frInter),
+      data: dataInter,
       backgroundColor: [
         'rgba(255, 255, 255, 0.2)',
       ],
@@ -44,8 +45,20 @@ let createChart = (arrFr, frInter, frComb) => {
       stack: 'combined',
     },
     {
-      label: 'Comb',
-      data: getDataArr(coordsX, frComb.combFrIII),
+      label: 'CombIII',
+      data: dataCombIII,
+      backgroundColor: [
+        'rgba(217, 47, 47, 0.2)',
+      ],
+      borderColor: [
+        'rgba(217, 47, 47, 1)',
+      ],
+      borderWidth: 2,
+      stack: 'combined',
+    },
+    {
+      label: 'CombIII2',
+      data: dataCombIII2,
       backgroundColor: [
         'rgba(217, 47, 47, 0.2)',
       ],

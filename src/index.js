@@ -13,7 +13,6 @@ let endFr;  // верхняя частота
 let dif;  // диапазон
 let frHeterodyne; // гетеродин
 let frIntermediate;	// массив ПЧ
-let combNumber; // комбинация верна
 let canvas; // дом-узел с графиком
 
 const n = [2, 3, 4];

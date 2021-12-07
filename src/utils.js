@@ -41,43 +41,39 @@ export function rand(min, max) {
 //   return data;
 // }
 
-export function getLabels(config) {
+export function getLabels(config) { // возвращает массив меток (коор - ты по оси Х)
   let cfg = config || {};
   // let min = cfg.min;
   // let max = cfg.max;
   let count = cfg.count;
   let arr = [];
 
-  for (let i = - count; i < 0; i++) {
-    arr.push(i);
-  }
-  for (let i = 0; i <= count; i++) {
+  for (let i = - count; i <= count; i++) {
     arr.push(i);
   }
 
   return arr;
 }
 
-export function getDataArr(arrLabels, arr) {
+export function getDataArr(arrLabels, arr) { // возвращает массив объектов с коор - тами
   let arrInput = [];
-  let objElem = {};
 
   for (let i = 0; i < arrLabels.length; i++) {
+    let obj = {};
+
     let filter = arr.find((item) => {
       if (item === arrLabels[i]) {
         return item;
       }
     });
-    
+    console.log(filter);
     if (typeof filter === "number") {
-      objElem.x = arrLabels[i]; 
-      objElem.y = 10;
-      arrInput.push(objElem); console.log('arr',arrInput[i]);
-    } else {
-      objElem.x = arrLabels[i];
-      objElem.y = 0;
-      arrInput.push(objElem);
+      obj.y = 10;      
+    } else {      
+      obj.y = 0;
     }
+    obj.x = arrLabels[i];
+    arrInput.push(obj);
   }
 
   return arrInput;
