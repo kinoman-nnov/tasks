@@ -59,21 +59,21 @@ export function getDataArr(arrLabels, arr) { // возвращает масси�
   let arrInput = [];
 
   for (let i = 0; i < arrLabels.length; i++) {
-    let obj = {};
+    let objCoords = {};
 
     let filter = arr.find((item) => {
       if (item === arrLabels[i]) {
         return item;
       }
     });
-    console.log(filter);
+    
     if (typeof filter === "number") {
-      obj.y = 10;      
+      objCoords.y = 10;      
     } else {      
-      obj.y = 0;
+      objCoords.y = 0;
     }
-    obj.x = arrLabels[i];
-    arrInput.push(obj);
+    objCoords.x = arrLabels[i];
+    arrInput.push(objCoords);
   }
 
   return arrInput;
