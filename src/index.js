@@ -1,7 +1,6 @@
 import './css/style.css';
 import chart from './module';
 
-
 const frForm = document.querySelector('#myForm');
 const button = document.querySelector('#loadButton');
 const result = document.querySelector('#result');
