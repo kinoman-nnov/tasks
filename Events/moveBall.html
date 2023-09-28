@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    #field {
+      width: 200px;
+      height: 150px;
+      border: 10px solid black;
+      background-color: #00FF00;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    #ball {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      transition: 1.5s cubic-bezier(0.0, 0.5, 0.5, 1.0);
+    }
+  </style>
+</head>
+
+<body style="height:2000px">
+
+  Нажмите на поле для перемещения мяча.
+  <br> Мяч не должен выходить за границы поля.
+
+
+  <div id="field">
+    <img src="https://ru.js.cx/clipart/ball.svg" id="ball"> . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+  </div>
+
+  <script>
+    const elemField = document.getElementById('field');
+    const elemBall = document.getElementById('ball');
+
+    function getCoords(elem) {
+      let box = elem.getBoundingClientRect();
+      return {
+        top: box.top + window.pageYOffset,
+        right: box.right + window.pageXOffset,
+        bottom: box.bottom + window.pageYOffset,
+        left: box.left + window.pageXOffset
+      }
+    }
+
+    // границы поля
+    const leftFieldBorder = getCoords(elemField).left + elemField.clientLeft;
+    const rightFieldBorder = getCoords(elemField).left + elemField.clientLeft + elemField.clientWidth;
+    const topFieldBorder = getCoords(elemField).top + elemField.clientTop;
+    const bottomFieldBorder = getCoords(elemField).top + elemField.clientTop + elemField.clientHeight;
+    // начальное положение мяча
+    elemBall.style.left = leftFieldBorder + "px";
+    elemBall.style.top = topFieldBorder + "px";
+
+    const ballWidth = elemBall.offsetWidth;
+    const ballHeight = elemBall.offsetHeight;
+
+    function fieldBorders(coordX, coordY) {  
+      // с учетом размеров мяча
+      if (coordX <= leftFieldBorder) coordX = leftFieldBorder + ballWidth/2;
+      if (coordX >= rightFieldBorder) coordX = rightFieldBorder - ballWidth/2;
+      if (coordY <= topFieldBorder) coordY = topFieldBorder + ballHeight/2;
+      if (coordY >= bottomFieldBorder) coordY = bottomFieldBorder - ballHeight/2;
+      return {coordX, coordY};
+    }
+
+    function handler(e) {     
+      elemBall.style.left = Math.round(fieldBorders(e.clientX, e.clientY).coordX - ballWidth/2) + 'px';
+      elemBall.style.top = Math.round(fieldBorders(e.clientX, e.clientY).coordY - ballHeight/2) + 'px';
+    }
+
+    elemField.addEventListener('click', handler);
+  </script>
+
+
+</body>
+</html>
+
+<!-- вариант LearnJs -->
+
+<!-- <!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    #field {
+      width: 200px;
+      height: 150px;
+      border: 10px solid black;
+      background-color: #00FF00;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    #ball {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 40px;
+      height: 40px;
+      transition: all 1s;
+    }
+  </style>
+</head>
+
+<body style="height:2000px">
+
+  Нажмите на поле для перемещения мяча.
+  <br>
+
+
+  <div id="field">
+    <img src="https://ru.js.cx/clipart/ball.svg" id="ball"> . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+  </div>
+
+  <script>
+    field.onclick = function(event) {
+
+      // координаты поля относительно окна браузера
+      let fieldCoords = this.getBoundingClientRect();
+
+      // мяч имеет абсолютное позиционирование (position:absolute), поле - относительное (position:relative)
+      // таким образом, координаты мяча рассчитываются относительно внутреннего, верхнего левого угла поля
+      let ballCoords = {
+        top: event.clientY - fieldCoords.top - field.clientTop - ball.clientHeight / 2,
+        left: event.clientX - fieldCoords.left - field.clientLeft - ball.clientWidth / 2
+      };
+
+      // запрещаем пересекать верхнюю границу поля
+      if (ballCoords.top < 0) ballCoords.top = 0;
+
+      // запрещаем пересекать левую границу поля
+      if (ballCoords.left < 0) ballCoords.left = 0;
+
+
+      // // запрещаем пересекать правую границу поля
+      if (ballCoords.left + ball.clientWidth > field.clientWidth) {
+        ballCoords.left = field.clientWidth - ball.clientWidth;
+      }
+
+      // запрещаем пересекать нижнюю границу поля
+      if (ballCoords.top + ball.clientHeight > field.clientHeight) {
+        ballCoords.top = field.clientHeight - ball.clientHeight;
+      }
+
+      ball.style.left = ballCoords.left + 'px';
+      ball.style.top = ballCoords.top + 'px';
+    }
+  </script>
+
+</body>
+</html> -->

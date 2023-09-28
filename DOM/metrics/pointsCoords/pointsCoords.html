@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="index.css">
+  <script>
+    document.onclick = function(e) { // показывает координаты точки клика
+      coords.innerHTML = e.clientX + ':' + e.clientY;
+    };
+  </script>
+</head>
+
+<body>
+
+  Кликните в любом месте для получения координат в контексте окна.
+  <br> Это для тестирования, чтобы проверить результат, который вы получили с помощью JavaScript.
+  <br>
+  <div id="coords">(координаты покажутся здесь)</div>
+
+
+  <div id="field">
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+  </div>
+
+
+  <div class="triangle-right" style="left:-20px;top:-176px">1</div>
+  <div class="triangle-right" style="left:-10px;top:-178px">3</div>
+  <div class="triangle-right" style="left:190px;top:-40px">4</div>
+  <div class="triangle-right" style="left:200px;top:-42px">2</div>
+
+
+  <script>
+    const elemField = document.getElementById('field');
+
+    function getCoords(elem) {
+      let box = elem.getBoundingClientRect();
+
+      return {
+        top: box.top + window.pageYOffset,
+        right: box.right + window.pageXOffset,
+        bottom: box.bottom + window.pageYOffset,
+        left: box.left + window.pageXOffset
+      }
+    }
+
+    function createMessageUnder(elem, number, html) {
+      let message = document.createElement('div');
+      // message.style.cssText = "position:absolute; color: red";
+      message.style.cssText = "color: red";
+
+      let coords = getCoords(elem);
+
+      // message.style.left = coords.left + "px";
+      // message.style.top = coords.bottom + "px";
+
+      message.innerHTML = `координаты ${number} треугольника ` + html[0]+':'+ html[1];
+      document.body.append(message);
+    }
+
+    const coordsTriangle1 = [getCoords(elemField).left, getCoords(elemField).top];
+    const coordsTriangle2 = [getCoords(elemField).right, getCoords(elemField).bottom];
+    const coordsTriangle3 = [getCoords(elemField).left + elemField.clientLeft, getCoords(elemField).top + elemField.clientTop];
+
+    const paddingRight = elemField.offsetWidth - elemField.clientWidth - elemField.clientLeft;
+    const paddingBottom = elemField.offsetHeight - elemField.clientHeight - elemField.clientTop;
+
+    const coordsTriangle4 = [getCoords(elemField).right - paddingRight, getCoords(elemField).bottom - paddingBottom];
+
+    createMessageUnder(elemField, 1, coordsTriangle1);
+    createMessageUnder(elemField, 2, coordsTriangle2);
+    createMessageUnder(elemField, 3, coordsTriangle3);
+    createMessageUnder(elemField, 4, coordsTriangle4);
+  </script>
+
+</body>
+</html>

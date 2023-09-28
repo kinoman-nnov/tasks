@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      .hours {
+        color: red;
+      }
+      .minutes {
+        color: blue;
+      }
+      .seconds {
+        color: green;
+      }
+    </style>
+  </head>
+<body>
+
+  <div id="clock">
+    <span class="hours">hh</span>:<span class="minutes">mm</span>:<span class="seconds">ss</span>
+  </div>
+
+  <input type="button" onclick="clockStart()" value="Старт">
+
+  <input type="button" onclick="clockStop()" value="Стоп">
+
+  <script>
+    const clock = document.getElementById('clock');
+    let hours = document.querySelector('.hours');
+    let minutes = document.querySelector('.minutes');
+    let seconds = document.querySelector('.seconds');
+    let timerId;
+    
+    function clockStart() {
+
+      const format = (val) => {
+        if (val < 10) {
+          return val = '0' + val
+        } else return val;
+      }
+      
+      const time = () => {
+        let now = new Date();
+
+        let getHours = now.getHours();
+        hours.innerHTML = format(getHours);
+
+        let getMinutes = now.getMinutes();
+        minutes.innerHTML = format(getMinutes);
+
+        let getSeconds = now.getSeconds();
+        seconds.innerHTML = format(getSeconds);
+      }
+
+      timerId = setInterval(time, 1000);
+      time();
+    }
+
+    function clockStop() {
+      clearInterval(timerId);
+      timerId = null;
+    }
+  </script>
+</body>
+</html>

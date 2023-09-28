@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+  <div id="tree"></div>
+
+  <!-- Результат должен быть:
+<div id="tree">
+<ul>
+  <li>Рыбы
+    <ul>
+      <li>форель</li>
+      <li>лосось</li>
+    </ul>
+  </li>
+  <li>Деревья
+    <ul>
+      <li>Огромные
+        <ul>
+          <li>секвойя</li>
+          <li>дуб</li>
+        </ul>
+      </li>
+      <li>Цветковые
+        <ul>
+          <li>яблоня</li>
+          <li>магнолия</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+</div>-->
+
+  <script>
+    let data = {
+      "Рыбы": {
+        "форель": {},
+        "лосось": {}
+      },
+
+      "Деревья": {
+        "Огромные": {
+          "секвойя": {},
+          "дуб": {}
+        },
+        "Цветковые": {
+          "яблоня": {},
+          "магнолия": {}
+        }
+      }
+    };
+
+    function createTree(container, data) {
+
+      const objLength = Object.keys(data).length;
+
+      if (objLength > 0) {
+
+        const elemUl = document.createElement('ul');
+        container.append(elemUl);
+
+        for (const prop in data) {
+          const elemLi = document.createElement('li');
+          elemLi.textContent = prop;
+          elemUl.append(elemLi); 
+          createTree(elemLi, data[prop]);
+        }
+      }
+    }
+
+    createTree(document.getElementById('tree'), data);
+  </script>
+
+</body>
+</html>

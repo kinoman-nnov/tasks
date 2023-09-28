@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    #list {
+      display: none;
+    }
+    button {
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+    .row-bottom {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="menu">
+    <div id="buttons">
+      <button class="row row-right" onclick="handleClick('show')">
+        ▶ Сладости (нажми меня)!
+      </button>
+      <button class="row row-bottom" onclick="handleClick('hidden')">
+        ▼ Сладости (нажми меня)!
+      </button>
+      
+    </div>
+    <ul id="list">
+      <li>Пирожное</li>
+      <li>Пончик</li>
+      <li>Мёд</li>
+    </ul>
+  </div>
+
+  <script>
+    const rowBottom = document.querySelector('.row-bottom');
+    const rowRight = document.querySelector('.row-right');
+
+    function handleClick(str) {
+      switch(str) {
+        case 'show':
+          rowRight.style.display = "none";
+          rowBottom.style.display = "block";
+          list.style.display = "block";
+          break;
+        case 'hidden':
+          rowRight.style.display = "block";
+          rowBottom.style.display = "none";
+          list.style.display = "none";
+          break;
+      }
+    }
+  </script>
+
+</body>
+</html>
