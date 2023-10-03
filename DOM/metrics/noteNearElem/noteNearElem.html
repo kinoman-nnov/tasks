@@ -32,48 +32,50 @@
      *
      * Оба элемента elem и anchor должны присутствовать в документе
      */
+    function getCoords(elem) {
+      let box = elem.getBoundingClientRect();
+
+      return {
+        top: box.top + window.pageYOffset,
+        right: box.right + window.pageXOffset,
+        bottom: box.bottom + window.pageYOffset,
+        left: box.left + window.pageXOffset
+      }
+    }
+
     function positionAt(anchor, position, elem) {
 
-      function getCoords(elem) {
-        let box = elem.getBoundingClientRect();
-
-        return {
-          top: box.top + window.pageYOffset,
-          right: box.right + window.pageXOffset,
-          bottom: box.bottom + window.pageYOffset,
-          left: box.left + window.pageXOffset
-        }
-      }
+      const coordsAnchor = getCoords(anchor);
 
       switch(position) {
         case 'top-out':  // if (x === 'top-out')
-          elem.style.left = getCoords(anchor).left + "px";
-          elem.style.top = getCoords(anchor).top - elem.offsetHeight + "px";
+          elem.style.left = coordsAnchor.left + "px";
+          elem.style.top = coordsAnchor.top - elem.offsetHeight + "px";
           break;
 
         case 'right-out':  // if (x === 'right-out')
-          elem.style.left = getCoords(anchor).right + "px";
-          elem.style.top = getCoords(anchor).top + "px";
+          elem.style.left = coordsAnchor.right + "px";
+          elem.style.top = coordsAnchor.top + "px";
           break;
 
         case 'bottom-out':  // if (x === 'bottom-out')
-          elem.style.left = getCoords(anchor).left + "px";
-          elem.style.top = getCoords(anchor).bottom + "px";
+          elem.style.left = coordsAnchor.left + "px";
+          elem.style.top = coordsAnchor.bottom + "px";
           break;
 
         case 'top-in':
-          elem.style.left = getCoords(anchor).left + "px";
-          elem.style.top = getCoords(anchor).top + "px";
+          elem.style.left = coordsAnchor.left + "px";
+          elem.style.top = coordsAnchor.top + "px";
           break;
 
         case 'right-in':
-          elem.style.left = getCoords(anchor).right - elem.offsetWidth + "px";
-          elem.style.top = getCoords(anchor).top + "px";
+          elem.style.left = coordsAnchor.right - elem.offsetWidth + "px";
+          elem.style.top = coordsAnchor.top + "px";
           break;
 
         case 'bottom-in':
-          elem.style.left = getCoords(anchor).left + "px";
-          elem.style.top = getCoords(anchor).bottom - elem.offsetHeight + "px";
+          elem.style.left = coordsAnchor.left + "px";
+          elem.style.top = coordsAnchor.bottom - elem.offsetHeight + "px";
           break;
       }
     }

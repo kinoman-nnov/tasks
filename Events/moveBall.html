@@ -48,10 +48,11 @@
     }
 
     // границы поля
-    const leftFieldBorder = getCoords(elemField).left + elemField.clientLeft;
-    const rightFieldBorder = getCoords(elemField).left + elemField.clientLeft + elemField.clientWidth;
-    const topFieldBorder = getCoords(elemField).top + elemField.clientTop;
-    const bottomFieldBorder = getCoords(elemField).top + elemField.clientTop + elemField.clientHeight;
+    const getCoordsField = getCoords(elemField);
+    const leftFieldBorder = getCoordsField.left + elemField.clientLeft;
+    const rightFieldBorder = getCoordsField.left + elemField.clientLeft + elemField.clientWidth;
+    const topFieldBorder = getCoordsField.top + elemField.clientTop;
+    const bottomFieldBorder = getCoordsField.top + elemField.clientTop + elemField.clientHeight;
     // начальное положение мяча
     elemBall.style.left = leftFieldBorder + "px";
     elemBall.style.top = topFieldBorder + "px";

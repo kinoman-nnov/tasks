@@ -1,0 +1,37 @@
+<!doctype html>
+<body>
+<div id="menu">
+  <button data-action="save">Сохранить</button>
+  <button data-action="load">Загрузить</button>
+  <button data-action="search">Поиск</button>
+</div>
+
+<script>
+  class Menu {
+    constructor(elem) {
+      elem.onclick = this.onClick.bind(this); // иначе this внутри него будет ссылаться на DOM-элемент (elem)
+    }
+
+    save() {
+      alert('сохраняю');
+    }
+
+    load() {
+      alert('загружаю');
+    }
+
+    search() {
+      alert('ищу');
+    }
+
+    onClick(event) {
+      let action = event.target.dataset.action;
+      if (action) {
+        this[action]();
+      }
+    }
+  }
+
+  new Menu(menu);
+</script>
+</body>

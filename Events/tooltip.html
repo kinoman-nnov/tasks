@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      height: 2000px;
+      /* добавим body прокрутку, подсказка должна работать и с прокруткой */
+    }
+
+    .tooltip {
+      /* немного стилизуем подсказку, можете использовать свои стили вместо этих */
+      position: absolute;
+      padding: 10px 20px;
+      border: 1px solid #b3c9ce;
+      border-radius: 4px;
+      text-align: center;
+      font: italic 14px/1.3 sans-serif;
+      color: #333;
+      background: #fff;
+      box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
+    }
+  </style>
+</head>
+
+<body>
+
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+
+  <button data-tooltip="эта подсказка должна быть длиннее, чем элемент">Короткая кнопка</button>
+  <button data-tooltip="HTML<br>подсказка">Ещё кнопка</button>
+
+  <p>Прокрутите страницу, чтобы кнопки оказались у верхнего края, а затем проверьте правильно ли выводятся подсказки.</p>
+
+
+  <script>
+
+    function showTooltip(anchor, position, html) {
+      const tooltipElem = document.createElement('div');
+      tooltipElem.classList.add('tooltip');
+      tooltipElem.innerHTML = html;
+
+      document.body.append(tooltipElem);
+
+      positionAt(anchor, position, tooltipElem);
+    }
+
+    function getCoords(elem) {
+      let box = elem.getBoundingClientRect();
+
+      return {
+        topWindow: box.top,
+        bottomWindow: box.bottom,
+        top: box.top + window.pageYOffset,
+        right: box.right + window.pageXOffset,
+        bottom: box.bottom + window.pageYOffset,
+        left: box.left + window.pageXOffset
+      }
+    }
+
+    function positionAt(anchor, position, el) {
+
+      const elTooltipHeight = el.offsetHeight;
+      const offset = 5; // отсутп от кнопки 'px'
+
+      const coordsAnchor = getCoords(anchor);
+      let posCentered = (anchor.offsetWidth - el.offsetWidth) / 2; // позиционирование по центру кнопки 'button'
+      if ((coordsAnchor.left + posCentered) < 0) posCentered = 0; // если tooltip выходит за левую границу окнаа
+      const mirrorTooltip = elTooltipHeight + anchor.offsetHeight + 2 * offset;
+
+      el.style.left = coordsAnchor.left + posCentered + "px";
+
+      switch(position) {
+        case 'top-out':
+          if (elTooltipHeight > coordsAnchor.topWindow) {
+            coordsAnchor.top += mirrorTooltip; // отобразить tooltip снизу, если недостаточно места вверху окна
+          }
+
+          el.style.top = coordsAnchor.top - elTooltipHeight - offset + "px";
+          break;
+
+        case 'right-out':
+          el.style.left = coordsAnchor.right + offset + "px";
+          el.style.top = coordsAnchor.top + "px";
+          break;
+
+        case 'bottom-out':
+          if (elTooltipHeight > (document.documentElement.clientHeight - coordsAnchor.bottomWindow)) {
+            coordsAnchor.bottom += - mirrorTooltip; // отобразить tooltip снизу, если недостаточно места снизу окна
+          }
+
+          el.style.top = coordsAnchor.bottom + offset + "px";
+          break;
+      }
+    }
+
+    document.addEventListener('mouseover', (e) => {
+      const tooltipValue = e.target.dataset.tooltip;
+      if (!tooltipValue) return;
+
+      const anchorElem = e.target.closest('button');
+
+      showTooltip(anchorElem, 'top-out', tooltipValue)
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      const tooltipValue = e.target.dataset.tooltip;
+      if (!tooltipValue) return;
+
+      const tooltipElemToRemove = document.querySelector('.tooltip');
+
+      if (!tooltipElemToRemove) return;
+ 
+      tooltipElemToRemove.remove();
+    });
+
+  </script>
+
+</body>
+</html>
