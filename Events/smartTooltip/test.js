@@ -85,7 +85,7 @@ describe("hoverIntent", function() {
 
   it("mouseover -> fast move -> no tooltip", function() {
     mouse('mouseover', 10, 10);
-    for(let i=10; i<200; i+= 10) {
+    for(let i=10; i<200; i+= 10) {console.log(i)
       setTimeout(
         () => mouse('mousemove', i, 10),
         i
