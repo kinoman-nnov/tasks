@@ -1,6 +1,7 @@
 let isDragging = false;
 
 function onMouseDown(e) {
+  e.preventDefault();
   
   // перетаскиваемый элемент
   const target = e.target.closest('.draggable');
@@ -11,7 +12,7 @@ function onMouseDown(e) {
   let currentPosY;
 
   let currentOffsetY = window.pageYOffset;
-  let currentOffsetX = window.pageXOffset; // чтобы добавить скролл по Х
+  let currentOffsetX = window.pageXOffset;
 
   // размеры перетаскиваемого элемента
   const targetWidth = target.offsetWidth;
@@ -22,7 +23,7 @@ function onMouseDown(e) {
   const shiftY = e.clientY - target.getBoundingClientRect().top;
 
   // ширина/высота видимой части окна
-  const windowWidth = document.body.clientWidth;
+  const windowWidth = document.documentElement.clientWidth;
   const windowHeight = document.documentElement.clientHeight;
   
   // размеры документа
@@ -31,21 +32,28 @@ function onMouseDown(e) {
     document.body.offsetHeight, document.documentElement.offsetHeight,
     document.body.clientHeight, document.documentElement.clientHeight
   );
-  // const scrollwidth = // для скролла по Х
+  const scrollWidth = Math.max(
+    document.body.scrollWidth, document.documentElement.scrollWidth,
+    document.body.offsetWidth, document.documentElement.offsetWidth,
+    document.body.clientWidth, document.documentElement.clientWidth
+  );
 
   // допустимые границы перемещения с учетом размеров элемента 
-  const rightBorder = windowWidth - targetWidth; // правая граница окна = документа
-  const windowBottom = windowHeight - targetHeight; // нижняя граница окна
+  const rightBorder = windowWidth - targetWidth; // правая граница окна
+  const bottomBorder = windowHeight - targetHeight; // нижняя граница окна
   
-  // максимальная высота проскролленной части документа
-  const maxOffsetY = scrollHeight - windowHeight; // нижняя граница окна
+  // максимальная высота/ширина проскролленной части документа
+  const maxOffsetY = scrollHeight - windowHeight;
+  const maxOffsetX = scrollWidth - windowWidth;
 
   startDragging(e);
 
   function startDragging(e) {
-    if(isDragging) {
+    if (isDragging) {
       return;
     }
+
+    isDragging = true;
 
     target.style.position = 'fixed';
 
@@ -60,43 +68,69 @@ function onMouseDown(e) {
     currentPosY = pageY - shiftY;
 
     // ограничить перенос элемента слева и справа
-    if (currentPosX <= 0) currentPosX = 0;
-    if (currentPosX >= rightBorder) currentPosX =  rightBorder;
+    if (currentPosX <= 0) {
+      if (currentOffsetX > 0) scrollPage("x", currentPosX);
+      currentPosX = 0;
+    }
+    if (currentPosX > rightBorder) {
+      if (currentOffsetX < maxOffsetX) scrollPage("x", currentPosX - rightBorder);
+      currentPosX =  rightBorder;
+    }
 
     // ограничить перенос элемента сверху и снизу
     if (currentPosY < 0) {
-      if (currentOffsetY > 0) scrollPage(currentPosY)
+      if (currentOffsetY > 0) scrollPage("y", currentPosY);
       currentPosY = 0;
     }
-    if (currentPosY > windowBottom) {
-      if (currentOffsetY < maxOffsetY) scrollPage(currentPosY - windowBottom);
-      currentPosY = windowBottom;
+    if (currentPosY > bottomBorder) {
+      if (currentOffsetY < maxOffsetY) scrollPage("y", currentPosY - bottomBorder);
+      currentPosY = bottomBorder;
     }
 
-    currentOffsetY = window.pageYOffset
+    currentOffsetX = window.pageXOffset;
+    currentOffsetY = window.pageYOffset;
     
     target.style.left = currentPosX + 'px';
     target.style.top = currentPosY + 'px';
   }
 
-  function scrollPage(scroll) {
+  function scrollPage(direction, scroll) {
+    let scrollX, scrollY;
+
+    switch(direction) {
+      case "x":
+        scrollX = scroll;
+        scrollY = 0;
+      break;
+      
+      case "y":
+        scrollX = 0;
+        scrollY = scroll;
+      break;
+    }
+
     window.scrollBy({
-      top: scroll,
-      left: 0,
+      top: scrollY,
+      left: scrollX,
       behavior: "instant"
     });
   }
 
   function stopDragging() {
-    if(!isDragging) {
+    if (!isDragging) {
       return;
     }
-    
+
+    isDragging = false;
+
     target.style.position = 'absolute';
 
+    currentOffsetX = window.pageXOffset;
+    currentPosX += currentOffsetX;
     currentOffsetY = window.pageYOffset;
     currentPosY += currentOffsetY;
 
+    target.style.left = currentPosX + 'px';
     target.style.top = currentPosY + 'px';
 
     document.removeEventListener('mousemove', onMouseMove);
