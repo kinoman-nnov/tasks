@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+<h1>Прокрути меня</h1>
+
+<script>
+  let docHeight = document.documentElement.offsetHeight;
+  let bodyHeight = document.body.offsetHeight;
+  const windowHeight = document.documentElement.clientHeight;
+
+  function createArticle() {
+    const p = document.createElement('p');
+    const date = new Date();
+    p.innerHTML = `Date: ${date}`;
+    document.body.append(p);
+  }
+
+  function fillPage() {
+    if (docHeight < windowHeight) docHeight = windowHeight;
+
+    if (docHeight >= bodyHeight) {  // заполнить пустую страницу
+      while (docHeight >= bodyHeight) {
+        bodyHeight = document.body.scrollHeight; // текущая высота body
+
+        createArticle();
+      }
+    } else { // заполнитю по скроллу
+      let currentDocHeight = document.documentElement.scrollHeight; // текущая высота документа
+      
+      if ((currentDocHeight - windowHeight - window.pageYOffset) < 100) {
+
+        createArticle();
+      }
+    }
+  }
+
+  fillPage();
+
+  window.addEventListener('scroll', fillPage);
+
+  // вариант с learnJs (компактный, виснет в песочнице!!?)
+
+  // function populate() {
+  //   while(true) {
+  //     let windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
+  //     if (windowRelativeBottom > document.documentElement.clientHeight + 100) break;
+  //     document.body.insertAdjacentHTML("beforeend", `<p>Date: ${new Date()}</p>`);
+  //   }
+  // }
+
+  // window.addEventListener('scroll', populate);
+
+  // populate(); // инициализация документа
+
+</script>
+
+</body>
+</html>

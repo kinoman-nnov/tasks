@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <style>
+    body,
+    html {
+      height: 100%;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    #matrix {
+      width: 400px;
+      margin: auto;
+      overflow: auto;
+      text-align: justify;
+    }
+
+    #arrowTop {
+      height: 9px;
+      width: 14px;
+      color: green;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+    }
+
+    #arrowTop::before {
+      content: '▲';
+    }
+  </style>
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+  <div id="matrix">
+    <script>
+      for (let i = 0; i < 2000; i++) document.writeln(i)
+    </script>
+  </div>
+
+  <div id="arrowTop" onclick="handleClick()" hidden></div>
+
+  <script>
+    let scrollButton = false;
+
+    const windowHeight = document.documentElement.clientHeight;
+
+    function showButtonOnScroll() {
+
+      const pageTop = document.documentElement.getBoundingClientRect().top;
+
+      if (Math.abs(pageTop) > windowHeight) {
+        scrollButton = true;
+        arrowTop.hidden = false;
+      }
+
+      if (Math.abs(pageTop) < windowHeight) {
+        scrollButton = false;
+        arrowTop.hidden = true;
+      }
+    }
+
+    function handleClick() {
+      scrollButton = false;
+      arrowTop.hidden = true;
+      window.scrollTo(pageXOffset, 0);
+    }
+
+    window.onscroll = showButtonOnScroll;
+
+    // решение с learnJs
+
+    // arrowTop.onclick = function() {
+    //   window.scrollTo(pageXOffset, 0);
+    //   // после scrollTo возникнет событие "scroll", так что стрелка автоматически скроется
+    // };
+
+    // window.addEventListener('scroll', function() {
+    //   arrowTop.hidden = (pageYOffset < document.documentElement.clientHeight);
+    // });
+
+  </script>
+
+</body>
+
+</html>
