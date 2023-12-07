@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <p>
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+    sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  </p>
+  <p>
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+    sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  </p>
+
+  <button id="btn--modal">Вызвать модальное окно</button>
+
+  <div id="prompt-form-container">
+    <form id="prompt-form">
+      <div id="prompt-message">Введите что-нибудь...
+        <br>Пожалуйста..
+      </div>
+      <input name="text" type="text">
+      <input type="submit" value="Ok">
+      <input type="button" name="cancel" value="Отмена">
+    </form>
+  </div>
+
+  <script>
+    const btnModal = document.getElementById('btn--modal');
+
+    const formContainer = document.getElementById('prompt-form-container');
+    const form = document.getElementById('prompt-form');
+    const formTitle = document.getElementById('prompt-message');
+
+    let coverDiv = null;
+
+    function blurBg() {
+      coverDiv = document.createElement('div');
+      coverDiv.id = 'cover-div';
+
+      document.body.append(coverDiv);
+
+      document.body.style.overflowY = 'hidden';
+    }
+
+    function preventLossFocus(e) {
+
+      if (!form.contains(e.relatedTarget)) {
+
+        e.target.focus();
+      }
+    }
+
+    function showModal(title) {
+      formContainer.style.display = 'block';
+
+      formTitle.innerHTML = title;
+      form.text.value = '';
+      form.text.focus();
+
+      // запретить потерю фокуса, пока форма не отправлена
+      form.addEventListener('focusout', preventLossFocus);
+
+      const inputElems = form.querySelectorAll('input');
+      const firstElInput = inputElems[0];
+      const lastElInput = inputElems[inputElems.length - 1];
+
+      // зациклить переход по Tab внутри модалки
+      form.onkeydown = (e) => {
+
+        if (e.code == 'Tab' && !e.shiftKey) {
+
+          if (e.target == lastElInput) {
+            firstElInput.focus();
+
+            return false;
+          }
+        }
+
+        if (e.code == 'Tab' && e.shiftKey) {
+
+          if (e.target == firstElInput) {
+            lastElInput.focus();
+
+            return false;
+          }
+        }
+      }
+    }
+
+    function hideModal() {
+      formContainer.style.display = 'none';
+
+      if (coverDiv) coverDiv.remove();
+      document.body.style.overflowY = '';
+
+      form.removeEventListener('focusout', preventLossFocus);
+
+      document.onkeydown = null;
+
+      coverDiv = null;
+    }
+
+    function showPrompt(html, callback) {
+
+      // размытый фон, пока форма не отправлена
+      blurBg();
+
+      // показать модалку
+      showModal(html);
+
+      form.onsubmit = (e) => {
+        e.preventDefault();
+
+        const value = form.text.value;
+
+        if (value == '') return;
+
+        callback(value);
+
+        hideModal();
+      }
+
+      form.cancel.onclick = (e) => {
+        e.preventDefault();
+        callback(null);
+
+        hideModal();
+      }
+
+      document.onkeydown = (e) => {
+        if (e.key == 'Escape') {
+          callback(null);
+
+          hideModal();
+        }
+      }
+    }
+
+    btnModal.onclick = () => showPrompt("Введите что-нибудь<br>...умное :)", function (value) {
+      alert('Вы ввели: ' + value);
+    });
+
+  </script>
+
+</body>
+
+</html>

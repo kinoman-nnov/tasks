@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    #mouse {
+      display: inline-block;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    #mouse:focus {
+      outline: 1px dashed black;
+    }
+  </style>
+</head>
+
+<body>
+
+  <p>Кликните по "изображению" мыши и перемещайте её с помощью клавиш со стрелками.</p>
+
+  <pre id="mouse">
+ _   _
+(q\_/p)
+ /. .\
+=\_t_/=   __
+ /   \   (
+((   ))   )
+/\) (/\  /
+\  Y  /-'
+ nn^nn
+</pre>
+
+
+  <script>
+    mouse.tabIndex = 0;
+
+    const targetWidth = mouse.getBoundingClientRect().width;
+    const targetHeight = mouse.getBoundingClientRect().height;
+
+    let targetLeft = null;
+    let targetTop = null;
+
+
+    function moveOnKeyDown(elem, key) {
+      targetLeft = elem.getBoundingClientRect().left;
+      targetTop = elem.getBoundingClientRect().top;
+
+      switch (key) {
+        case 'ArrowRight':
+          elem.style.left = targetLeft + targetWidth + 'px';
+          break;
+
+        case 'ArrowLeft':
+          elem.style.left = targetLeft - targetWidth + 'px';
+          break;
+
+        case 'ArrowUp':
+          elem.style.top = targetTop - targetHeight + 'px';
+          break;
+
+        case 'ArrowDown':
+          elem.style.top = targetTop + targetHeight + 'px';
+          break;
+
+        default:
+          return;
+      }
+
+    }
+
+
+
+    mouse.onfocus = (e) => {
+      const target = e.target;
+
+      if (!target.closest('#mouse')) return;
+
+      // получить начальные координаты элемента 
+      moveOnKeyDown(target, null);
+
+      target.style.cssText = `position: fixed; left: ${targetLeft + 'px'}; top: ${targetTop + 'px'};`;
+
+      const onKeyDown = (e) => {
+        const code = e.code;
+
+        if ((code == 'ArrowRight') || (code == 'ArrowLeft') || (code == 'ArrowUp') || (code == 'ArrowDown')) {
+
+          moveOnKeyDown(target, code);
+        } else return;
+      }
+
+      mouse.addEventListener('keydown', onKeyDown);
+
+      mouse.onblur = function () {
+        mouse.removeEventListener('keydown', onKeyDown);
+      }
+    }
+
+    // вариант с LearnJs
+
+    // mouse.tabIndex = 0;
+
+    // mouse.onclick = function () {
+    //   this.style.left = this.getBoundingClientRect().left + 'px';
+    //   this.style.top = this.getBoundingClientRect().top + 'px';
+
+    //   this.style.position = 'fixed';
+    // };
+
+
+    // mouse.onkeydown = function (e) {
+    //   switch (e.key) {
+    //     case 'ArrowLeft':
+    //       this.style.left = parseInt(this.style.left) - this.offsetWidth + 'px';
+    //       return false;
+    //     case 'ArrowUp':
+    //       this.style.top = parseInt(this.style.top) - this.offsetHeight + 'px';
+    //       return false;
+    //     case 'ArrowRight':
+    //       this.style.left = parseInt(this.style.left) + this.offsetWidth + 'px';
+    //       return false;
+    //     case 'ArrowDown':
+    //       this.style.top = parseInt(this.style.top) + this.offsetHeight + 'px';
+    //       return false;
+    //   }
+    // };
+
+  </script>
+
+</body>
+
+</html>

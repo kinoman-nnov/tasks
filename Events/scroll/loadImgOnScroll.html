@@ -170,6 +170,11 @@
     function isVisible(elem) {
       const elemTopBorder = elem.getBoundingClientRect().top;
 
+      const sliceToLoad = Math.abs(document.documentElement.getBoundingClientRect().top - 2 * windowHeight);
+
+      // загрузить картинки на 1 страницу ниже
+      // if (elemTopBorder < sliceToLoad) return true;
+
       if (elemTopBorder < windowHeight) return true;
     }
 
@@ -226,7 +231,8 @@
 
     showVisible();
 
-    showVisible = throttle(showVisible, 100);
+    // ограничить количество вызовов showVisible по скроллу (1 раз в ms)
+    // showVisible = throttle(showVisible, 100);
 
     window.addEventListener('scroll', showVisible);
 
