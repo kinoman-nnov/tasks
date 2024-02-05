@@ -1,0 +1,18 @@
+<!doctype html>
+
+<body>
+  <textarea id="area" style="width:80%;height:60px">
+Переведите фокус на меня, курсор окажется на 10-й позиции
+</textarea>
+
+  <script>
+    area.onfocus = () => {
+      // нулевая задержка setTimeout нужна, чтобы это сработало после получения фокуса элементом формы
+      setTimeout(() => {
+        // мы можем задать любое выделение
+        // если начало и конец совпадают, курсор устанавливается на этом месте
+        area.selectionStart = area.selectionEnd = 10;
+      });
+    };
+  </script>
+</body>

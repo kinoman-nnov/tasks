@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+</head>
+
+<body>
+
+  <span id="text">Получение ифрейма.</span>
+
+  <script>
+    window.addEventListener('message', function (event) {
+      text.innerHTML = `Получено ${event.data} из ${event.origin}`;
+    });
+  </script>
+
+</body>
+
+</html>

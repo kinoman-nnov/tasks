@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<body>
+  <img crossorigin="anonymous" src="https://en.js.cx/images-load/2.jpg">
+
+  <script>
+    "use strict";
+
+    // берём любое изображение
+    let img = document.querySelector('img');
+
+    // создаём <canvas> того же размера
+    let canvas = document.createElement('canvas');
+    canvas.width = img.clientWidth;
+    canvas.height = img.clientHeight;
+
+    let context = canvas.getContext('2d');
+
+    // копируем изображение в  canvas (метод позволяет вырезать часть изображения)
+    context.drawImage(img, 0, 0);
+    // мы можем вращать изображение при помощи context.rotate() и делать множество других преобразований
+
+    // toBlob является асинхронной операцией, для которой callback-функция вызывается при завершении
+    canvas.toBlob(function (blob) {
+      // после того, как Blob создан, загружаем его
+      let link = document.createElement('a');
+      link.download = 'example.png';
+
+      link.href = URL.createObjectURL(blob);
+      // link.click();
+
+      // удаляем внутреннюю ссылку на Blob, что позволит браузеру очистить память
+      URL.revokeObjectURL(link.href);
+    }, 'image/png');
+
+    // вариант с Promise
+    // (async () => {
+
+    //   try {
+    //     const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+
+    //     const link = document.createElement('a');
+    //     link.download = 'example.png';
+    //     link.href = URL.createObjectURL(blob);
+    //     // link.click();
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // })();
+
+  </script>
+
+</body>

@@ -1,0 +1,56 @@
+<!doctype html>
+
+<body>
+  <input id="input" style="width:200px" value="Select here and click the button">
+  <button id="button">Обернуть выделение звёздочками *...*</button>
+
+  <script>
+    button.onclick = () => {
+      if (input.selectionStart == input.selectionEnd) {
+        return; // ничего не выделено
+      }
+
+      let selected = input.value.slice(input.selectionStart, input.selectionEnd);
+      input.setRangeText(`*${selected}*`);
+    };
+  </script>
+</body>
+
+
+
+<!-- Заменить текст в поле ввода и оставить его выделенным -->
+
+<!-- <!doctype html>
+
+<body>
+  <input id="input" style="width:200px" value="Замените ЭТО в тексте">
+  <button id="button">Заменить ЭТО</button>
+
+  <script>
+    button.onclick = () => {
+      let pos = input.value.indexOf("ЭТО");
+      if (pos >= 0) {
+        input.setRangeText("*ЭТО*", pos, pos + 3, "select");  // "select" – только что вставленный текст будет выделен
+        input.focus(); // ставим фокус, чтобы выделение было видно
+      }
+    };
+  </script>
+</body> -->
+
+
+
+<!-- Кнопка вставляет "ПРИВЕТ" на месте курсора и устанавливает его после вставленного текста -->
+
+<!-- <!doctype html>
+
+<body>
+  <input id="input" style="width:200px" value="Текст Текст Текст Текст Текст">
+  <button id="button">Вставить "ПРИВЕТ" на месте курсора</button>
+
+  <script>
+    button.onclick = () => {
+      input.setRangeText("ПРИВЕТ", input.selectionStart, input.selectionEnd, "end");
+      input.focus();
+    };
+  </script>
+</body> -->

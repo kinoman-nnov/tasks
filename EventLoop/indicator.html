@@ -1,0 +1,56 @@
+<!doctype html>
+
+<body>
+  <div id="progress"></div>
+
+  <script>
+    let i = 0;
+
+    function count() {
+
+      // сделать часть крупной задачи
+      do {
+        i++;
+        // изменения индикатора будут отрисованы в промежутках между частями, 
+        // изменения в DOM отрисовываются только после того, как задача выполнена
+        progress.innerHTML = i;
+      } while (i % 1e3 != 0);
+
+      if (i < 1e7) {
+        setTimeout(count);
+      }
+
+    }
+
+    count();
+  </script>
+</body>
+
+
+<!-- Использована функция queueMicrotask вместо setTimeout. Отрисовка страницы происходит только в самом конце -->
+
+<!-- <!doctype html>
+
+<body>
+  <div id="progress"></div>
+
+  <script>
+    let i = 0;
+
+    function count() {
+
+      // делаем часть крупной задачи
+      do {
+        i++;
+        progress.innerHTML = i;
+      } while (i % 1e3 != 0);
+
+      if (i < 1e6) {
+        queueMicrotask(count);
+      }
+
+    }
+
+    count();
+  </script>
+</body> -->

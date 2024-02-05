@@ -1,0 +1,78 @@
+<!doctype html>
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    #downloadLane {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .lane {
+      background: grey;
+      opacity: 0.2;
+      width: 400px;
+      height: 20px;
+    }
+
+    #progress {
+      width: 0%;
+      height: 100%;
+      background: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="downloadLane">
+    <span id="info">...Loading</span>
+    <div class="lane">
+      <div id="progress"></div>
+    </div>
+  </div>
+
+  <script>
+
+    let i = 0;
+    let percent = 0;
+
+    // корректировка округления десятичных дробей
+    Math.round10 = function (value, exp) {
+
+      // Сдвиг разрядов
+      value = value.toString().split("e");
+      value = Math.round(+(value[0] + "e" + (value[1] ? +value[1] - exp : -exp)));
+      // Обратный сдвиг
+      value = value.toString().split("e");
+      return +(value[0] + "e" + (value[1] ? +value[1] + exp : exp));
+    }
+
+    const promise = new Promise((resolve, reject) => {
+      function count() {
+        // сделать часть крупной задачи
+        do {
+          i++;
+
+          percent = Math.round10((100 * i / 1e6), -1) + '%';
+          info.innerHTML = percent;
+          progress.style.width = percent;
+        } while (i % 1e3 != 0);
+
+        if (i < 1e6) {
+          setTimeout(count);
+        } else {
+          resolve(info);
+        }
+      }
+
+      count();
+    })
+
+    // выполнится, когда промис завершится, независимо от того, успешно или нет
+    promise.finally(() => console.log('completed'))
+      // таким образом, индикатор загрузки всегда останавливается, прежде чем мы продолжим
+      .then(result => result.innerHTML = "Загрузка завершена!");
+
+  </script>
+</body>

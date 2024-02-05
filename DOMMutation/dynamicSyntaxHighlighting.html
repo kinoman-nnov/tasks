@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism.min.css" rel="stylesheet" />
+</head>
+
+<body>
+
+  <p id="highlight-demo" style="border: 1px solid #ddd">динамически вставить содержимое как фрагменты кода через 1с
+  </p>
+
+  <script>
+    "use strict";
+
+    let demoElem = document.getElementById('highlight-demo');
+
+    let observer = new MutationObserver(mutations => {
+
+      for (let mutation of mutations) {
+        // проверим новые узлы, есть ли что-то, что надо подсветить?
+
+        for (let node of mutation.addedNodes) {
+          // отслеживаем только узлы-элементы, другие (текстовые) пропускаем
+          if (!(node instanceof HTMLElement)) continue;
+
+          // проверить, не является ли вставленный элемент примером кода
+          if (node.matches('pre[class*="language-"]')) {
+
+            Prism.highlightElement(node);
+          }
+
+          // или, может быть, пример кода есть в его поддереве?
+          for (let elem of node.querySelectorAll('pre[class*="language-"]')) {
+
+            Prism.highlightElement(elem);
+          }
+        }
+      }
+    });
+
+    window.onload = function () {
+
+      // динамически вставить содержимое как фрагменты кода
+      setTimeout(function () {
+        demoElem.innerHTML = `Фрагмент кода ниже:
+      <pre class="language-javascript"><code> let hello = "world!"; </code></pre>
+      <div>Ещё один:</div>
+      <div>
+        <pre class="language-css"><code>.class { margin: 5px; } </code></pre>
+      </div>
+    `;
+      }, 1000)
+    }
+
+    observer.observe(demoElem, { childList: true, subtree: true });
+  </script>
+
+  <!-- JavaScript-библиотека для подсветки синтаксиса -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js"></script>
+
+</body>
+
+</html>

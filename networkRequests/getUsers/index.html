@@ -1,0 +1,66 @@
+<!doctype html>
+<script src="https://ru.js.cx/test/libs.js"></script>
+<script src="test.js"></script>
+<script>
+
+  async function getUsers(names) {
+    const url = 'https://api.github.com/users/';
+
+    const urlsArr = names.map(name => url + name);
+
+    try {
+      const responsesArr = await Promise.allSettled(urlsArr.map(url => fetch(url)));
+
+      const usersArr = await Promise.allSettled(responsesArr.map(response => {
+        if (response.value.status == 200) {
+          return response.value.json();
+        } else return response.value = null;
+      }));
+
+      const result = usersArr.map(user => user.value);
+
+      return result;
+    } catch (e) {
+      console.log(e)
+    }
+
+  }
+
+</script>
+
+</html>
+
+<!-- вариант с learnJs работает в 2 раза быстрее -->
+
+<!-- <!doctype html>
+<script src="https://ru.js.cx/test/libs.js"></script>
+<script src="test.js"></script>
+<script>
+
+  async function getUsers(names) {
+    let jobs = [];
+
+    for (let name of names) {
+      let job = fetch(`https://api.github.com/users/${name}`).then(
+        successResponse => {
+          if (successResponse.status != 200) {
+            return null;
+          } else {
+            return successResponse.json();
+          }
+        },
+        failResponse => {
+          return null;
+        }
+      );
+      jobs.push(job);
+    }
+
+    let results = await Promise.all(jobs);
+
+    return results;
+  }
+
+</script>
+
+</html> -->

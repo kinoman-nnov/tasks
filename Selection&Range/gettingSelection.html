@@ -1,0 +1,25 @@
+<!doctype html>
+
+<body>
+  <p id="p">Выдели меня: <i>курсив</i> и <b>жирный</b></p>
+
+  Склонировано: <span id="cloned"></span>
+  <br>
+  Как текст: <span id="astext"></span>
+
+  <script>
+    document.onselectionchange = function () {
+      let selection = document.getSelection();
+
+      cloned.innerHTML = astext.innerHTML = "";
+
+      // Клонируем DOM-элементы из диапазонов (здесь мы поддерживаем множественное выделение)
+      for (let i = 0; i < selection.rangeCount; i++) {
+        cloned.append(selection.getRangeAt(i).cloneContents());
+      }
+
+      // Получаем как текст
+      astext.innerHTML += selection;
+    };
+  </script>
+</body>

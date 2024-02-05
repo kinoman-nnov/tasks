@@ -1,0 +1,16 @@
+<!doctype html>
+
+<body>
+  <textarea id="area" style="width:80%;height:60px">
+Выделите что-нибудь в этом тексте, чтобы обновить значения ниже.
+</textarea>
+  <br>
+  От <input id="from" disabled> – До <input id="to" disabled>
+
+  <script>
+    area.onselect = function () {
+      from.value = area.selectionStart;
+      to.value = area.selectionEnd;
+    }
+  </script>
+</body>
