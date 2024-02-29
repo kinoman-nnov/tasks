@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<script src="browser.js"></script>
+
+Все посетители этой страницы будут видеть сообщения друг друга.
+
+<form name="publish">
+  <input type="text" name="message" />
+  <input type="submit" value="Send" />
+</form>
+
+<div id="subscribe"></div>
+
+<script>
+  const baseUrl = "http://localhost:8080/";
+
+  new PublishForm(document.forms.publish, `${baseUrl}publish`);
+  
+  // случайный url, чтобы избежать проблем с кешированием.
+  new SubscribePane(document.getElementById('subscribe'), `${baseUrl}subscribe?random=` + Math.random());
+</script>
