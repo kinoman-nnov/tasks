@@ -1,0 +1,29 @@
+<!doctype html>
+<textarea style="width:200px; height: 60px;" id="area" placeholder="Напишите текст"></textarea>
+<br>
+<button id="removeBtn">Очистить</button>
+
+<script>
+
+  function areaValue() {
+    const text = localStorage.getItem("areaVal");
+
+    if (text) {
+      area.value = text;
+    } else area.value = "";
+  }
+
+  // onchange, чтобы отслеживать изменения фокуса/закрытия страницы
+  // oninput, чтобы отслеживать каждое изменение поля textarea
+  area.onchange = (e) => {
+    localStorage.setItem("areaVal", e.target.value);
+  }
+
+  removeBtn.onclick = () => {
+    localStorage.removeItem('areaVal');
+    areaValue();
+  }
+
+  areaValue();
+
+</script>
