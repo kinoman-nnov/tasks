@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <script src="https://en.js.cx/libs/animate.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div id="field">
+    <img src="https://en.js.cx/clipart/ball.svg" width="40" height="40" id="ball">
+  </div>
+
+  <script>
+
+    // Загружаемый скрипт => Вспомогательная функция animate для создания анимации:
+
+    // function animate(options) {
+
+    //   var start = performance.now();
+
+    //   requestAnimationFrame(function animate(time) {
+    //     // timeFraction от 0 до 1
+    //     var timeFraction = (time - start) / options.duration;
+    //     if (timeFraction > 1) timeFraction = 1;
+
+    //     // текущее состояние анимации
+    //     var progress = options.timing(timeFraction)
+
+    //     options.draw(progress);
+
+    //     if (timeFraction < 1) {
+    //       requestAnimationFrame(animate);
+    //     }
+    //   });
+    // }
+
+    function makeEaseOut(timing) {
+      return function (timeFraction) {
+        return 1 - timing(1 - timeFraction);
+      }
+    }
+
+    function bounce(timeFraction) {
+      for (let a = 0, b = 1; 1; a += b, b /= 2) {
+        if (timeFraction >= (7 - 4 * a) / 11) {
+          return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2);
+        }
+      }
+    }
+
+    function linear(timeFraction) {
+      return timeFraction;
+    }
+
+    function quad(timeFraction) {
+      return Math.pow(timeFraction, 2)
+    }
+
+    const fieldHeight = field.clientHeight;
+    const ballHeight = ball.getBoundingClientRect().height;
+    const ratioHeight = fieldHeight - ballHeight;
+    const ratioWidth = 100;
+
+    ball.onclick = () => {
+      animate({
+        timing: makeEaseOut(bounce),
+        draw: function (progress) {
+          ball.style.top = progress * ratioHeight + 'px';
+        },
+        duration: 2000
+      });
+      // в решении на learnJs используют timing: makeEaseOut(quad)
+      animate({
+        timing: linear,
+        draw: function (progress) {
+          ball.style.left = progress * ratioWidth + 'px';
+        },
+        duration: 2000
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>
