@@ -1,0 +1,104 @@
+<!doctype html>
+<style>
+  custom-menu[centered] {
+    --custom-menu-field-color: green;
+  }
+</style>
+
+<template id="tmpl">
+  <style>
+    .menu {
+      color: var(--custom-menu-field-color, black);
+    }
+
+    :host([centered]) {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-color: blue;
+    }
+
+    :host {
+      display: inline-block;
+      border: 1px solid red;
+      padding: 10px;
+    }
+
+    ul {
+      margin: 0;
+      list-style: none;
+      padding-left: 20px;
+    }
+
+    ::slotted([slot="title"]) {
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    ::slotted([slot="title"])::before {
+      content: '📂';
+      font-size: 14px;
+    }
+
+    .closed ::slotted([slot="title"])::before {
+      content: '📁';
+    }
+
+    .closed ul {
+      display: none;
+    }
+  </style>
+
+  <div class="menu">
+    <slot name="title"></slot>
+    <ul>
+      <slot name="item"></slot>
+      <slot></slot>
+    </ul>
+
+  </div>
+</template>
+
+<script>
+  customElements.define('custom-menu', class extends HTMLElement {
+    connectedCallback() {
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.append(tmpl.content.cloneNode(true));
+
+      this.shadowRoot.querySelector('slot[name="title"]').onclick = () => {
+        this.shadowRoot.querySelector('.menu').classList.toggle('closed');
+      };
+
+      // слотовый элемент добавляется/удаляется/заменяется
+      this.shadowRoot.querySelector('.menu').addEventListener('slotchange', e => {
+        let slot = e.target;
+        if (slot.name == 'item') {
+          this.items = slot.assignedElements().map(elem => elem.textContent);
+          // alert("Items: " + this.items);
+        }
+      });
+    }
+  });
+
+  setTimeout(() => {
+    menuCentered.insertAdjacentHTML('beforeEnd', '<li slot="item">Шоколад</li>')
+  }, 1000);
+</script>
+
+<custom-menu id="menuCentered" centered>
+  <span slot="title">Сладости</span>
+  <li slot="item">Леденцы</li>
+  <li slot="item">Фруктовые тосты</li>
+  <li slot="item">Кексы</li>
+  <div>...и др.</div>
+</custom-menu>
+
+<custom-menu>
+  <span slot="title">Сладости</span>
+  <li slot="item">Леденцы</li>
+  <li slot="item">Фруктовые тосты</li>
+  <li slot="item">Кексы</li>
+  <div>...и др.</div>
+</custom-menu>
