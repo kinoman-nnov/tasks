@@ -1,10 +1,104 @@
+// вставить HTML после фрагмента
+
+let regexpTagBody = /(?<=<body(>|\s.*?>))/i;
+
+let strHTML = `
+<html>
+  <body style="height: 200px">
+  ...
+  </body>
+</html>
+`;
+
+strHTML = strHTML.replace(regexpTagBody, `<h1>Hello</h1>`);
+console.log(strHTML)
+
+// // вариант с learnJs
+// strHTML = '...<body style="...">...';
+// strHTML = strHTML.replace(/<body.*?>/, '$&<h1>Hello</h1>'); // В строке замены $& означает само совпадение
+// console.log(strHTML); // ...<body style="..."><h1>Hello</h1>...
+
+
+// поиск строк в кавычках
+
+let regexpStrQuote = /"(\\.|[^"\\])*"/g;
+let strQuote = ' .. "test me" .. "Скажи \\"Привет\\"!" .. "\\\\ \\"" .. ';
+
+console.log( strQuote.match(regexpStrQuote) ); // "test me","Скажи \"Привет\"!","\\ \""
+
+
+// пары BB-кодов
+
+let regexpBB = /\[(?<tag>((url|b|quote)]))(.*?)\[\/\k<tag>/gs;
+
+// // вариант с learnJs
+// let regexpBB = /\[(b|url|quote)].*?\[\/\1]/gs;
+
+let strBB = `
+  [b]привет![/b]
+  [quote]
+    [url]http://ya.ru[/url]
+  [/quote]
+`;
+console.log(strBB.match(regexpBB));
+
+
+// шаблон для времени ( Альтернация (или) | )
+
+let regexpTime = /([01]\d|2[0-3]):[0-5]\d/g;
+console.log("00:00 10:10 23:59 25:99 1:2".match(regexpTime)); // 00:00,10:10,23:59
+
+// языки программирования
+
+let regexpLang = /Java(Script)?|PHP|C(\+\+)?/g;
+console.log("Java JavaScript PHP C++ C".match(regexpLang));
+
+
+// Разобрать матем. выражение
+
+function parse(expr) {
+  const regExp = /(?<a>-?\d+(\.\d+)?)\s*(?<op>[+\-*\/])\s*(?<b>-?\d+(\.\d+)?)/;
+
+  const obj = expr.match(regExp).groups;
+
+  return [obj.a, obj.op, obj.b];
+}
+
+let [a, op, b] = parse("1.2 * 3.4");
+
+console.log(a); // 1.2
+console.log(op); // *
+console.log(b); // 3.4
+
+// // вариант с learnJs
+// function parse(expr) {
+//   let regexp = /(-?\d+(?:\.\d+)?)\s*([-+*\/])\s*(-?\d+(?:\.\d+)?)/;
+
+//   let result = expr.match(regexp);
+
+//   if (!result) return [];
+//   result.shift();
+
+//   return result;
+// }
+
+// console.log( parse("-1.23 * 3.45") );  // -1.23, *, 3.45
+
+
 // Найти все числа
 
 let regexpNum = /-?\d+(\.\d+)?/g;
 
 let strNums = "-1.5 0 2 -123.4.";
 
-console.log( strNums.match(regexpNum) ); // -1.5, 0, 2, -123.4
+console.log(strNums.match(regexpNum)); // -1.5, 0, 2, -123.4
+
+// все неотрицательные целые
+regexpNum = /(?<![-\d])\d+/g; // (?<!\d) - исключить поиск с середины другого числа.
+
+strNums = "0 12 -5 123 -18";
+
+console.log( strNums.match(regexpNum) ); // 0, 12, 123
 
 
 // Проверьте MAC-адрес
@@ -100,8 +194,17 @@ console.log(strTag.match(regexpTag)); // '<a href="/">', '<input type="radio" ch
 // вложенные группы
 regexpTag = /<(([a-z]+)\s*([^>]*))>/;
 
-let result = str.match(regexp);
+let result = strTag.match(regexpTag);
 console.log(result[0]); // <a href="/">
 console.log(result[1]); // a href="/"
 console.log(result[2]); // a
 console.log(result[3]); // href="/"
+
+// Найдите весь тег
+regexpTag = /<style\b[^<>]*>/g;
+
+strTag = '<style> <styler> <style test="...">';
+// // вариант с learnJs
+// regexpTag = /<style(>|\s.*?>)/g;
+
+console.log( strTag.match(regexpTag) ); // <style>, <style test="...">
