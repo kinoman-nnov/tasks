@@ -12,7 +12,7 @@ let arr = [1, 2, 3, 4, 5, 6, 7];
 
 // console.log(arr.filter(inBetween(3, 6))); // 3,4,5,6
 
-// let newArr = [1, 2, 10, 7];
+// let anotherArr = [1, 2, 10, 7];
 
 // function inArray(array) {
 //   return function (item) {
@@ -30,4 +30,4 @@ function inArray(array) {
   };
 }
 
-console.log(arr.filter(inArray(newArr))); // 1,2,7
+console.log(arr.filter(inArray(anotherArr))); // 1,2,7

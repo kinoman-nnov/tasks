@@ -1,5 +1,5 @@
 function f(a) {
-  console.log(a)
+  console.log(a);
 }
 
 function throttle(update, ms) {
@@ -26,6 +26,7 @@ function throttle(update, ms) {
       currentArg = currentThis = null;
     }, ms);
   }
+  
   return wrapper;
 }
 
