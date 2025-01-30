@@ -106,13 +106,14 @@ function createTableSudoku(create, elem, size = 3) {
   let ind = 1;
 
   const exceptionsMap = {};
+console.log(exceptionsMap);
 
   let tableData = {
     state: 'outer',
     tableId: 'main',
     arr: null
   }
-
+  
   // создает внешнюю таблицу без данных
   const table = create.call(this, elem, tableData, size);
   table.id = "mainTable";
@@ -148,6 +149,7 @@ function createTableSudoku(create, elem, size = 3) {
       ind++;
     }
   }
+  return exceptionsMap;
 }
 
-createTableSudoku(createTable, sudokuElem);
+// createTableSudoku(createTable, sudokuElem);
