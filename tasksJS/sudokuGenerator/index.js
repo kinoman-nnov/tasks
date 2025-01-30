@@ -3,38 +3,38 @@ const arrNumbers = [1,2,3,4,5,6,7,8,9];
 
 const sudokuElem = document.getElementById('sudoku-app');
 
-let map = new Map();
+// let map = new Map();
 
 // функция создает таблицу и добавляет ее в elem
-function createTable(elem, data, tr = 3, tc = 3) {
+function createTable(elem, data, size) {
   const table = document.createElement('table');
 
   table.style.borderCollapse = 'collapse';
 
   // создает ряды в таблице 
-  for (let i = 1; i <= tr; i++) {
+  for (let i = 0; i < size; i++) {
 
     const row = table.insertRow();
 
     // создает ячейки в каждом ряду
-    for (let j = 1; j <= tc; j++) {
+    for (let j = 0; j < size; j++) {
 
       const cell = row.insertCell();
 
       const { state, tableId } = data;
 
-      // функция вставки содержимого в ячейку
-      const value = insertValue(data);
-
       // инфо о ячейке     
       const cellData = {
         state,
         tableId,
-        cellIndex: [row.rowIndex, cell.cellIndex],
-        value
+        cellIndex: [row.rowIndex, cell.cellIndex]
       }
-      // ключ: объект cellData, значение: value
-      map.set(cellData, value);
+
+      // функция вставки содержимого в ячейку
+      const value = insertValue(data, cellData);
+
+      // // ключ: объект cellData, значение: value
+      // map.set(cellData, value);
 
       cell.innerHTML = value;
     }
@@ -45,26 +45,42 @@ function createTable(elem, data, tr = 3, tc = 3) {
   return table;
 }
 
-function insertValue(data) {
+function insertValue(data, cellData) {
+  
+  const { state, exceptions } = data;
 
-  const { state, arr, arrExceptions } = data;
+  // индекс ряда внутренних таблиц, в котором находится ячейка
+  const cellIndRow = cellData.cellIndex[0];
 
-  // если таблица внешняя, ячейка пустая
+  // если таблица внешняя, ячейки пустые
   if (state == 'outer') return null;
 
-  let result = getRandomNum.call(this, arr);
+  const arrModified = transformArrData.call(this, data, cellIndRow);
 
-  arrExceptions.push(result);
+  const num = getRandomNum.call(this, arrModified);
 
-  console.log(arrExceptions)
-  
-  return result;
+  // массивы исключений для каждой строки внутренних таблиц
+  exceptions['row' + cellIndRow].push(num);
+
+  return num;
 }
 
-function transformArrData(arr, ind, i) {
-  
-  if (ind == 1) return arr;
+// вспомогательная функция-фильтр, исключающая совпадения в массиве
+function inArray(array) {
+  return function(x) {
+    return !array.includes(x);
+  }
+}
 
+function transformArrData(data, cellIndRow) {
+
+  const { arr, exceptions } = data;
+
+  // возвращает новый массив данных, исключая данные
+  // уже внесенные в таблицу
+  const modifiedArr = arr.filter(inArray(exceptions['row' + cellIndRow]));
+
+  return modifiedArr;
 }
 
 // фунция выбирает случайное число из массива arr
@@ -84,43 +100,49 @@ function getRandomNum(arr) {
 //   }
 // }
 
-// получить целое число от min(включительно) до max(не включительно)
-// function getRandomNum(min, max) {
-//   min = Math.ceil(min);
-//   max = Math.floor(max);
-//   return Math.floor(Math.random() * (max - min) + min);
-// }
-
-
-
-// console.log(arrTransform([1,2,3,4,5,6,7,8,9]))
-
-function createTableSudoku(create, elem) {
+function createTableSudoku(create, elem, size = 3) {
   
+  // индексы внутренних таблиц
   let ind = 1;
+
+  const exceptionsMap = {};
 
   let tableData = {
     state: 'outer',
     tableId: 'main',
-    arr: []
+    arr: null
   }
 
-  const table = create.call(this, elem, tableData);
+  // создает внешнюю таблицу без данных
+  const table = create.call(this, elem, tableData, size);
   table.id = "mainTable";
   
   for (let i = 0; i < table.rows.length; i++) {
-    
+
+    // формирует карту исключений
+    const exceptions = {};
+    for(let i = 0; i < table.rows.length; i++) {
+      exceptions['row' + i] = [];
+    }
+    exceptionsMap[i] = exceptions;
+
     for (let j = 0; j < table.rows[i].cells.length; j++) {
+      // ячейка внешней таблицы без данных
       const cell = table.rows[i].cells[j];
 
       tableData = {
         state: 'inner',
         tableId: ind,
         arr: [...arrNumbers],
-        arrExceptions: []
+        exceptions
+        // exceptions: {
+        //   row0: [],
+        //   row1: [],
+        //   row2: []
+        // }
       }
-
-      const innerTable = create.call(this, cell, tableData);
+      
+      const innerTable = create.call(this, cell, tableData, size);
       innerTable.classList.add('inner');
 
       ind++;
@@ -129,8 +151,3 @@ function createTableSudoku(create, elem) {
 }
 
 createTableSudoku(createTable, sudokuElem);
-
-// for (const item of map) {
-//   console.log(item)
-// }
-// console.log(mainTable.rows[0].cells[0].firstElementChild.rows[0].cells[0].cellData)
