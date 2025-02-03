@@ -2,55 +2,81 @@ describe("table", function () {
 
   let sudoku = createTableSudoku(createTable, sudokuElem);
 
-  function sumRowX(item) {
-    if (Array.isArray(item)) {
+  describe("Сумма ряда по оси Х", function () {
 
-      let result = item.reduce((prev, current) => prev + current, 0);
+    let testSumRowX = counterTests(makeTest);
+    testSumRowX.coor = 'X';
 
-      testSumRowX(result);
-      return result;
-    } else {
-      for (let inner of Object.values(item)) {
+    sumRow(sudoku.x, testSumRowX);
+  });
+  describe("Сумма ряда по оси Y", function () {
 
-        sumRowX(inner);
-      }
-      return;
-    }
-  }
+    let testSumColumnY = counterTests(makeTest);
+    testSumColumnY.coor = 'Y';
 
-  function counterTests(func) {
-    let count = 0;
-  
-    function wrap() {
-      wrap.calls = count++;
-      
-      return func.apply(this, arguments);
-    }
-    wrap.calls = count;
-    return wrap;
-  }
-  
-  function makeTest(sum) {  
-    it(`сумма ряда X:${testSumRowX.calls} равна 45`, function () {
-        assert.equal(sum, 45);
-    });
-  }
-  
-  let testSumRowX = counterTests(makeTest);
+    sumRow(sudoku.y, testSumColumnY);
+  });
+  describe("Сумма чисел внутри i-ой таблицы", function () {
 
-  // function makeTest() {
-  //   let count = 0;
+    let testSumTable = counterTests(makeTest2);
   
-  //   return function(sum) {
-  //     it(`сумма ряда X:${count} равна 45`, function () {
-  //       assert.equal(sum, 45);
-  //     });
-  
-  //     return count++;
-  //   };
-  // }
-  
-  // let testSumX = makeTest();
-
-  sumRowX(sudoku)
+    sumRow(sudoku.mainTable, testSumTable);
+  });
 });
+
+function makeTest(sum, func) {
+  it(`сумма ряда ${func.coor}:${func.calls} равна 45`, function () {
+    assert.equal(sum, 45);
+  });
+}
+
+function makeTest2(sum, func) {
+  it(`сумма чисел внутри ${func.calls + 1}-ой таблицы равна 45`, function () {
+    assert.equal(sum, 45);
+  });
+}
+
+// функция-обертка добавляет счетчик вызовов функции
+function counterTests(func) {
+  let count = 0;
+
+  function wrap() {
+    wrap.calls = count++;
+
+    return func.apply(this, arguments);
+  }
+  wrap.calls = count;
+  return wrap;
+}
+
+function sumRow(item, func) {
+  if (Array.isArray(item)) {
+
+    let result = item.reduce((prev, current) => prev + current, 0);
+
+    func.call(this, result, func);
+    return result;
+  } else {
+    for (let elem of Object.values(item)) {
+
+      sumRow(elem, func);
+    }
+    return;
+  }
+}
+
+// function sumColumn(item, func) {
+//   if (Array.isArray(item)) {
+
+//     let result = item.reduce((prev, current) => prev + current, 0);
+
+//     func.call(this, result, func);
+//     return result;
+//   } else {
+//     for (let elem of Object.values(item)) {
+
+//       sumRow(elem, func);
+//     }
+//     return;
+//   }
+// }
