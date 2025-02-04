@@ -83,7 +83,7 @@ textarea
 	overflow:auto
 } */
 
-#mainTable {
+#mainTableId {
   width: 400px;
   height: 400px;
 }

@@ -1,26 +1,24 @@
 describe("table", function () {
 
-  let sudoku = createTableSudoku(createTable, sudokuElem);
-
   describe("Сумма ряда по оси Х", function () {
 
     let testSumRowX = counterTests(makeTest);
     testSumRowX.coor = 'X';
 
-    sumRow(sudoku.x, testSumRowX);
+    sumRow(sudokuMap.x, testSumRowX);
   });
   describe("Сумма ряда по оси Y", function () {
 
     let testSumColumnY = counterTests(makeTest);
     testSumColumnY.coor = 'Y';
 
-    sumRow(sudoku.y, testSumColumnY);
+    sumRow(sudokuMap.y, testSumColumnY);
   });
   describe("Сумма чисел внутри i-ой таблицы", function () {
 
     let testSumTable = counterTests(makeTest2);
   
-    sumRow(sudoku.mainTable, testSumTable);
+    sumRow(sudokuMap.mainTable, testSumTable);
   });
 });
 

@@ -3,8 +3,6 @@ const arrData = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const sudokuElem = document.getElementById('sudoku-app');
 
-// let map = new Map();
-
 // функция создает таблицу и добавляет ее в elem
 function createTable(elem, data, size) {
   const table = document.createElement('table');
@@ -32,9 +30,6 @@ function createTable(elem, data, size) {
 
       // функция вставки содержимого в ячейку
       const value = insertValue(data, cellData);
-
-      // // ключ: объект cellData, значение: value
-      // map.set(cellData, value);
 
       cell.innerHTML = value;
     }
@@ -81,16 +76,17 @@ function inArray(array) {
 
 function transformArrData(data, cellData) {
 
-  const { arr, exceptionsX, numbersMap, tableId } = data;
+  const { arr, exceptionsX, exceptionsY, numbersMap, tableId } = data;
 
   const cellIndRow = cellData.cellIndex[0];
-  // const cellIndColumn = cellData.cellIndex[1];
+  const cellIndColumn = cellData.cellIndex[1];
 
-  const modifiedArr = arr.filter(inArray(exceptionsX['row' + cellIndRow]));
-  
+  const modifiedArrX = arr.filter(inArray(exceptionsX['row' + cellIndRow]));
+  const modifiedArr = modifiedArrX.filter(inArray(exceptionsY['column' + cellIndColumn]));
+
   // return modifiedArr;
   const modifiedArray = modifiedArr.filter(inArray(numbersMap.mainTable[tableId]));
-  console.log(arr, modifiedArr, modifiedArray);
+
   return modifiedArray;
 }
 
@@ -130,7 +126,7 @@ function createTableSudoku(create, elem, size = 3) {
 
   // создает внешнюю таблицу без данных
   const table = create.call(this, elem, tableData, size);
-  table.id = "mainTable";
+  table.id = "mainTableId";
 
   const exceptionsY = {};
   const exceptionsX = {};
@@ -170,6 +166,11 @@ function createTableSudoku(create, elem, size = 3) {
         //   row1: [],
         //   row2: []
         // }
+        // exceptionsY: {
+        //   column0: [],
+        //   column1: [],
+        //   column2: []
+        // }
       }
 
       const innerTable = create.call(this, cell, tableData, size);
@@ -177,9 +178,38 @@ function createTableSudoku(create, elem, size = 3) {
 
       ind++;
     }
-  } console.log(numbersMap);
+  }
 
   return numbersMap;
 }
 
-// createTableSudoku(createTable, sudokuElem);
+// если хотя бы в одном массиве есть 'undefined',
+// возвращает true, иначе false
+function checkArr(item) {
+
+  if (Array.isArray(item)) {
+
+    return item.includes(undefined);
+  } else {
+    let result;
+    for (let elem of Object.values(item)) {
+
+      result = result || checkArr(elem);
+    }
+
+    return result;
+  }
+}
+
+let isChecked = false;
+let sudokuMap;
+
+let i = 0;
+do {i++
+  sudokuMap = createTableSudoku(createTable, sudokuElem);
+  
+  isChecked = checkArr(sudokuMap.mainTable);
+
+  if (isChecked) mainTableId.remove();
+} while (isChecked);
+console.log(i + ' попыток');
