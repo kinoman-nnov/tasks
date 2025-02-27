@@ -82,10 +82,9 @@ function transformArrData(data, cellData) {
   const cellIndColumn = cellData.cellIndex[1];
 
   const modifiedArrX = arr.filter(inArray(exceptionsX['row' + cellIndRow]));
-  const modifiedArr = modifiedArrX.filter(inArray(exceptionsY['column' + cellIndColumn]));
+  const modifiedArrXY = modifiedArrX.filter(inArray(exceptionsY['column' + cellIndColumn]));
 
-  // return modifiedArr;
-  const modifiedArray = modifiedArr.filter(inArray(numbersMap.mainTable[tableId]));
+  const modifiedArray = modifiedArrXY.filter(inArray(numbersMap.mainTable[tableId]));
 
   return modifiedArray;
 }
@@ -99,23 +98,15 @@ function getRandomNum(arr) {
   return roll[0];
 }
 
-// function cachingFunc(num) {
-//   const cache = new Map();
-
-//   if (cache.has(num)) { // если кеш содержит такой x, заново запустить ГСЧ
-//     return cache.get(num);
-//   }
-// }
-
 function createTableSudoku(create, elem, size = 3) {
 
   // индексы внутренних таблиц
   let ind = 1;
 
   const numbersMap = {
-    x: {},
-    y: {},
-    mainTable: {}
+    x: {}, // ряд в mainTable
+    y: {}, // столбец в mainTable
+    mainTable: {} // массивы внутренних таблиц
   };
 
   let tableData = {
@@ -128,8 +119,8 @@ function createTableSudoku(create, elem, size = 3) {
   const table = create.call(this, elem, tableData, size);
   table.id = "mainTableId";
 
-  const exceptionsY = {};
   const exceptionsX = {};
+  const exceptionsY = {};
 
   for (let i = 0; i < table.rows.length; i++) {
 
@@ -144,7 +135,7 @@ function createTableSudoku(create, elem, size = 3) {
       // ячейка внешней таблицы без данных
       const cell = table.rows[i].cells[j];
 
-      // // формирует карту исключений по оси Y
+      // формирует карту исключений по оси Y
       if (i == 0) {
         for (let k = 0; k < table.rows.length; k++) {
           exceptionsY['column' + k] = [];
@@ -204,6 +195,9 @@ function checkArr(item) {
 let isChecked = false;
 let sudokuMap;
 
+// время выполнения 
+let start = Date.now();
+
 let i = 0;
 do {i++
   sudokuMap = createTableSudoku(createTable, sudokuElem);
@@ -213,3 +207,7 @@ do {i++
   if (isChecked) mainTableId.remove();
 } while (isChecked);
 console.log(i + ' попыток');
+
+
+let end = Date.now() - start;
+console.log('Время выполнения: ' + end + 'ms');
