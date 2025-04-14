@@ -1,8 +1,6 @@
 let sumArrData = arrData.reduce((sum, current) => sum + current, 0);
 
 describe("table", function () {
-  
-  if (numbersMap == null) return;
 
   describe("Сумма ряда по оси Х", function () {
 
@@ -54,13 +52,15 @@ function counterTests(func) {
 function sumRow(item, func) {
   if (Array.isArray(item)) {
 
-    let result = item.reduce((prev, current) => prev + current, 0);
+    let result = item.reduce((prev, current) => prev + current.value, 0);
 
     func.call(this, result, func);
     return result;
   } else {
     for (let elem of Object.values(item)) {
 
+      if (typeof elem == 'string') continue;
+      
       sumRow(elem, func);
     }
     return;

@@ -193,16 +193,16 @@ function checkArr(item) {
 }
 
 let isChecked = false;
-let sudokuMap;
+let numbersMap;
 
 // время выполнения 
 let start = Date.now();
 
 let i = 0;
 do {i++
-  sudokuMap = createTableSudoku(createTable, sudokuElem);
+  numbersMap = createTableSudoku(createTable, sudokuElem);
   
-  isChecked = checkArr(sudokuMap.mainTable);
+  isChecked = checkArr(numbersMap.mainTable);
 
   if (isChecked) mainTableId.remove();
 } while (isChecked);

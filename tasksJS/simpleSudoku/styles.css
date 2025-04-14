@@ -83,9 +83,14 @@ textarea
 	overflow:auto
 } */
 
-#mainTableId {
+.mainTable {
   width: 400px;
   height: 400px;
+	margin-bottom: 10px;
+}
+
+.mainTable--task {
+	opacity: .8;
 }
 
 .inner {
@@ -96,4 +101,11 @@ textarea
 .inner td {
   border: solid 1px;
   text-align: center;
+	width: 40px;
+	height: 40px;
 }
+
+/* .mark {
+	background-color: red; 
+	opacity: 0.2;
+} */
