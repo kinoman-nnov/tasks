@@ -1,8 +1,8 @@
-import inputData from './inputData.json' with { type: 'json' };
+import { inputData } from './inputData.js';
 import { runTime } from './helpers.js';
 
 import { createMapNumbers, createMapNumbersCounter } from './createMapNumbers.js';
-import { createTask, deleteNumbers, scanerArr} from './createTask.js';
+import { createTask, deleteNumbers, scannerArr, exceptNumbers, iterationNum } from './createTask.js';
 
 // Входные данные:
 // массив данных, размер таблиц
@@ -106,16 +106,17 @@ function renderTableSudoku(elem, numbersMap, size = 3) {
   }
 }
 
-console.log('// Решение //');
+try {
+  console.log('// Решение //');
 
-// посчитать время выполнения, затраченное на поиск числовой карты
-const createMapNumbersEvaluation = runTime(createMapNumbers);
-const numbersMap = createMapNumbersEvaluation(arrData, size);
+  // посчитать время выполнения, затраченное на поиск числовой карты
+  const createMapNumbersEvaluation = runTime(createMapNumbers);
+  const numbersMap = createMapNumbersEvaluation(arrData, size);
 
-// количество попыток затраченное на подбор решения repeater-ом
-console.log('попыток: ' + createMapNumbersCounter.calls);
+  // количество попыток затраченное на подбор решения repeater-ом
+  console.log('попыток: ' + createMapNumbersCounter.calls);
 
-if (!!numbersMap) {
+  if (!numbersMap) throw new Error("Try again!");
 
   console.log('\n// Задача //');
 
@@ -124,13 +125,17 @@ if (!!numbersMap) {
   const task = createTaskEvaluation(arrData, numbersMap, difficulty);
 
   console.log('Количество пустых ячеек: ' + deleteNumbers.size);
-  console.log('попыток: ' + scanerArr.calls);
+  console.log('Количество неудач: ' + exceptNumbers.size);
+  console.log('вызовов scanerArr: ' + scannerArr.calls);
 
   // отобразить на странице задачу
   renderTableSudoku(sudokuElem, numbersMap, size);
-  
-} else {
+
+} catch (err) {
   const text = document.createElement('h1');
-  text.innerHTML = "Try again!";
+  text.innerHTML = err.message;
+
+  console.log(err);
+
   sudokuElem.appendChild(text);
 }

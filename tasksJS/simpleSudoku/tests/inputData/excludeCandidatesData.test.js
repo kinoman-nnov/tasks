@@ -1,4 +1,5 @@
-const mapInstance = {
+// Исключение кандидатов
+const excludeCandidatesMap = {
   mainTable: {
     0: [
       { value: 7, address: { axisX: 'sectionX0.row0', axisY: 'sectionY0.column0', innerTableId: 0 } },
@@ -33,33 +34,33 @@ const mapInstance = {
       { value: 3, address: { axisX: 'sectionX0.row2', axisY: 'sectionY2.column1', innerTableId: 2 } },
       { value: [1, 5], address: { axisX: 'sectionX0.row2', axisY: 'sectionY2.column2', innerTableId: 2 } }
     ]
+  },
+  get objToCheck() {
+    return {
+      arr: this.mainTable[0],
+      cell: this.mainTable[0][2]
+    }
+  },
+  get arrX() {
+    return [
+      this.mainTable[0][0],
+      this.mainTable[0][1],
+      this.mainTable[0][2],
+      this.mainTable[1][0],
+      this.mainTable[1][1],
+      this.mainTable[1][2],
+      this.mainTable[2][0],
+      this.mainTable[2][1],
+      this.mainTable[2][2]
+    ]
+  },
+  get arrY() {
+    return [
+      this.mainTable[0][2],
+      this.mainTable[0][5],
+      this.mainTable[0][8]
+    ]
   }
-
 };
 
-const objToCheck = {
-  arr: mapInstance.mainTable[0],
-  cell: mapInstance.mainTable[0][2]
-};
-
-const arrX = [
-  mapInstance.mainTable[0][0],
-  mapInstance.mainTable[0][1],
-  mapInstance.mainTable[0][2],
-  mapInstance.mainTable[1][0],
-  mapInstance.mainTable[1][1],
-  mapInstance.mainTable[1][2],
-  mapInstance.mainTable[2][0],
-  mapInstance.mainTable[2][1],
-  mapInstance.mainTable[2][2],
-];
-
-const arrY = [
-  mapInstance.mainTable[0][2],
-  mapInstance.mainTable[0][5],
-  mapInstance.mainTable[0][8],
-];
-
-const obj = { objToCheck, arrX, arrY };
-
-export { obj, mapInstance }
+export { excludeCandidatesMap }

@@ -16,13 +16,13 @@ function repeater(func, n = 100) {
 
       } while ((result === undefined || result === '' || result === false || result === 0 || result === null) && (k < n));
 
-      if (k == n) return null;
+      if (k == n) return result || null;
 
     } catch (err) {
 
-      console.log(err);
-      
-      return null;
+      // console.log(err);
+      // return null;
+      throw err;
     }
 
     return result;
@@ -30,34 +30,38 @@ function repeater(func, n = 100) {
 }
 
 // функция возврщает true, если массивы состоят из чисел, иначе false
-function scanerArr(item, func) {
+function scannerArr(item, func, flag) {
 
   // прервать выполнение, чтобы не превысить максимальный размер стека вызовов
-  if (scanerArr.calls > 50000) throw new Error('Не могу найти решение!');
-  
+  if (scannerArr.calls > 50000) throw new Error('Превышено количество вызовов scanner!');
+
   if (Array.isArray(item)) {
 
     // операция над массивом
     // возращает булевое значение
-    const isPassed = func.call(this, item);
+    const isPassed = func.call(this, item, flag);
 
     return isPassed;
+
   } else {
+
     let result = true;
 
     for (let elem of Object.values(item)) {
 
       if (typeof elem == 'string') continue;
+      
+      arguments[0] = elem;
 
-      result = scanerArr(elem, func) && result;
+      result = scannerArr.apply(this, arguments) && result;
     }
 
     return result;
   }
 }
 
-// посчитать количество вызовов scanerArr
-scanerArr = counter(scanerArr);
+// посчитать количество вызовов scannerArr
+scannerArr = counter(scannerArr);
 
 // функция подсчета затраченного времени
 function runTime(func) {
@@ -135,6 +139,19 @@ function groupBy(arr, key) {
   }, {});
 }
 
+function sortByArrLength (arr) {
+  return arr.reduce(function (acc, i) {
+    (acc[i.value.length] ??= []).push(i);
+    if (i.value.length > acc.maxLength) acc.maxLength = i.value.length;
+    return acc;
+  }, { maxLength: 0 });
+}
+
+function hasNoNull(complexArr) {
+  const hasNoNull = complexArr.every(elem => elem.value !== null);
+  return hasNoNull;
+}
+
 // функция сравненивает объекты и возвращает true, если они идентичны
 function isEqual(obj1, obj2) {
   if (JSON.stringify(obj1) === JSON.stringify(obj2)) return true;
@@ -144,7 +161,7 @@ function isEqual(obj1, obj2) {
 // функция-обертка добавляет счетчик вызовов функции
 function counter(func) {
   let count = 0;
-  
+
   function wrap() {
     wrap.calls = ++count;
 
@@ -160,11 +177,13 @@ export {
   notInArray,
   adaptedNotInArray,
   exceptionArr,
-  scanerArr,
+  scannerArr,
   inArray,
   groupBy,
+  sortByArrLength,
   randomInteger,
   accessToProp,
+  hasNoNull,
   runTime,
   repeater,
   counter

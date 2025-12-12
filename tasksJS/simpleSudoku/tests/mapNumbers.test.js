@@ -3,13 +3,13 @@ import {
   createMapNumbersCounter
 } from '../src/createMapNumbers.js';
 import {
-  scanerArr,
+  scannerArr,
   counter as counterTests,
   runTime
 } from '../src/helpers.js';
-import objArrData from '../src/inputData.json' with { type: 'json' };
+import { inputData } from '../src/inputData.js';
 
-const { arrData, size } = objArrData;
+const { arrData, size } = inputData;
 
 // const sumArrData = arrData.reduce((sum, current) => sum + current, 0);
 const sumArrData = sumArr(arrData);
@@ -31,7 +31,7 @@ describe("Числовая карта", function () {
 
     const testSumRowX = handler(makeTest);
 
-    scanerArr(numbersMap.x, testSumRowX);
+    scannerArr(numbersMap.x, testSumRowX);
   });
 
   describe("Сумма ряда по оси Y", function () {
@@ -41,7 +41,7 @@ describe("Числовая карта", function () {
 
     const testSumColumnY = handler(makeTest);
 
-    scanerArr(numbersMap.y, testSumColumnY);
+    scannerArr(numbersMap.y, testSumColumnY);
   });
 
   describe("Сумма чисел внутри i-ой таблицы", function () {
@@ -50,7 +50,7 @@ describe("Числовая карта", function () {
 
     const testSumTable = handler(makeTest2);
 
-    scanerArr(numbersMap.mainTable, testSumTable);
+    scannerArr(numbersMap.mainTable, testSumTable);
   });
 });
 

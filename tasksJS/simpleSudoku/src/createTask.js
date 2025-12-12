@@ -1,10 +1,11 @@
-import inputData from './inputData.json' with { type: 'json' };
+import { inputData } from './inputData.js';
 import {
   exceptionArr as getArrayProbableValues,
-  scanerArr,
+  scannerArr,
   repeater,
   randomInteger,
-  accessToProp
+  accessToProp,
+  counter
 } from './helpers.js';
 import { analyzeCandidates } from './analyzer.js';
 
@@ -25,8 +26,8 @@ let exceptNumbers = new Map();
 
 function createTask(arr, map, difficulty = 1) {
 
-  // копия созданной числовой карты
-  const jsonMap = JSON.stringify(map);
+  // копия созданной числовой карты решения задачи
+  const originMap = JSON.stringify(map);
 
   let n; // количество удаленных ячеек
   switch (difficulty) {
@@ -45,71 +46,91 @@ function createTask(arr, map, difficulty = 1) {
   }
 
   let i = 0;
+  let iterationNum = 0;
+  let count = 0;
+n=35
+  try {
 
-  while (i < n) {
+    while (i < n) {
 
-    // если размер коллекции исключений превышает пороговое значение
-    // прекратить поиск пустых ячеек
-    if ((deleteNumbers.size + exceptNumbers.size) == size ** 4) return true;
+      iterationNum++;
 
-    // сгенерировать случайную таблицу и случайную ячейку для удаления
-    let rndTable = randomInteger(0, arr.length - 1);
-    let rndItem = randomInteger(0, arr.length - 1);
+      // прервать выполнение, чтобы не превысить максимальный размер стека вызовов
+      if (iterationNum > 50000) throw new Error('Не могу найти решение!');
 
-    // создать ключ
-    let key = String(rndTable) + String(rndItem);
+      // если размер коллекции исключений превышает пороговое значение
+      // прекратить поиск пустых ячеек
+      // if ((deleteNumbers.size + exceptNumbers.size) == size ** 4) return true;
 
-    // если коллекции deleteNumbers и exceptNumbers уже содержат комбинацию с таким ключом,
-    // прекратить выполнение
-    if (deleteNumbers.has(key)) continue;
-    if (exceptNumbers.has(key)) continue;
+      // сгенерировать случайную таблицу и случайную ячейку для удаления
+      let rndTable = randomInteger(0, arr.length - 1);
+      let rndItem = randomInteger(0, arr.length - 1);
 
-    // случайная ячейка из массива чисел случайной таблицы
-    const rndCell = map.mainTable[rndTable][rndItem];
+      // создать ключ
+      let key = String(rndTable) + String(rndItem);
 
-    // добавить ячейку в коллекцию
-    deleteNumbers.set(key, rndCell);
+      // если коллекции deleteNumbers и exceptNumbers уже содержат комбинацию с таким ключом,
+      // прекратить выполнение
+      if (deleteNumbers.has(key)) continue;
+      // if (exceptNumbers.has(key)) continue;
+      count++;
+      // случайная ячейка из числовой карты
+      const rndCell = map.mainTable[rndTable][rndItem];
 
-    // удалить число в выбранной ячейке и запомнить
-    const deletedNumber = rndCell.value;
-    rndCell.value = null;
+      // добавить ячейку в коллекцию
+      deleteNumbers.set(key, rndCell);
 
-    // ряд, колонка и таблица удаленной ячейки
-    const coordsEmptyCell = getCoordsEmptyCell(map);
+      // удалить число в выбранной ячейке и запомнить
+      const deletedNumber = rndCell.value;
+      rndCell.value = null;
 
-    // посчитать возможные значения (массив или число) для пустой ячейки
-    const candidatesToCell = getCandidates(arr, map, coordsEmptyCell);
+      // ряд, колонка и таблица удаленной ячейки
+      const coordsEmptyCell = getCoordsEmptyCell(map);
 
-    // добавить обработчик
-    // проверить массив, если есть пустоты - заполнить
-    const handler = checkArr(candidatesToCell);
+      // посчитать возможные значения (массив или число) для пустой ячейки
+      const candidatesToCell = getCandidates(arr, map, coordsEmptyCell);
 
-    // попытаться найти решение (заполнить пустые ячейки),
-    // если решение найдено, вернуть map
-    const solutionMap = findSolutions(map, handler);
+      // добавить обработчик
+      // проверить массив, если есть пустоты - заполнить
+      const handler = checkArr(candidatesToCell);
 
-    // проверить верно ли найденное решение
-    // если решение верно, продолжить
-    if (JSON.stringify(solutionMap) === jsonMap) {
-      i++;
+      // попытаться найти решение (заполнить пустые ячейки),
+      // если решение найдено, вернуть map
+      const currentMap = findSolutions(map, handler);
+      const currentMapJSON = JSON.stringify(currentMap);
+
+      // проверить верно ли найденное решение
+      // если решение верно, продолжить
+      if (currentMapJSON === originMap) {
+        i++;
+      }
+      else {
+        // иначе удалить ячейку из коллекции deleteNumbers
+        deleteNumbers.delete(key);
+        // вернуть значение в ячейку таблицы
+        rndCell.value = deletedNumber;
+        // добавить в коллекцию исключений exceptNumbers
+        // exceptNumbers.set(key, rndCell);
+      }
+
+      // обнулить проверенные решения, перед следующей итерацией поиска решения
+      for (const [key, objVal] of deleteNumbers) {
+
+        objVal.value = null;
+
+        deleteNumbers.set(key, objVal);
+      }
     }
-    else {
-      // иначе удалить ячейку из коллекции deleteNumbers
-      deleteNumbers.delete(key);
-      // вернуть значение в ячейку таблицы
-      rndCell.value = deletedNumber;
-      // добавить в коллекцию исключений exceptNumbers
-      exceptNumbers.set(key, rndCell);
-    }
 
-    // обнулить проверенные решения, перед следующей итерацией поиска решения
-    for (const [key, objVal] of deleteNumbers) {
+  } catch (err) {
 
-      objVal.value = null;
-
-      deleteNumbers.set(key, objVal);
-    }
+    console.log(map);
+    // console.log("%c" + err, "color:red");
+    console.log(err);
+    
   }
+  console.log('iterationNum:', iterationNum);
+  console.log('попыток:', count);
 
   return true;
 }
@@ -134,15 +155,18 @@ function getCoordsEmptyCell(map) {
 // функция возвращает возможные значения (массив или число) для пустой ячейки
 function getCandidates(arr, map, getCoords) {
 
-  return function (objToCheck) {
+  return function (objToCheck, flag) {
 
     const { arrX, arrY, innerTable } = getCoords(objToCheck);
 
     // массив возможных значений для вставки в пустую ячейку
     let arrProbableNums = getArrayProbableValues(arr, arrX, arrY, innerTable);
 
-    // исследовать массив кандидатов на исключение
-    arrProbableNums = analyzeCandidates({ objToCheck, arrX, arrY }, arrProbableNums, map);
+    if (flag === true) {
+    
+      // исследовать массив кандидатов на исключение
+      arrProbableNums = analyzeCandidates({ objToCheck, arrX, arrY }, map);
+    }
 
     // если массив единичный, вернуть значение
     if (arrProbableNums.length == 1) return arrProbableNums[0];
@@ -153,16 +177,33 @@ function getCandidates(arr, map, getCoords) {
 
 function findSolutions(map, handler) {
 
-  const isChecked = multipleScaner(map.mainTable, handler);
+  let isChecked = false;
+  let flag = false;
 
+  try {
+    isChecked = multipleScaner(map.mainTable, handler, flag); // подключает анализатор, когда flag = true;
+
+    // console.log(JSON.stringify(map)===snapshot);
+
+    // if (isChecked === false && currentMap === snapshot) console.log(isChecked);
+
+  } catch (err) {
+
+    // console.log(err);
+    // return null;
+    throw err;
+  }
+
+  return map;
   // если массивы прошли проверку вернуть числовую карту
-  if (isChecked === true) return map;
-  else return null;
+  // if (isChecked === true) return map;
+
+  // else return null;
 }
 
 function checkArr(func) {
 
-  return function (array) {
+  return function (array, flag) {
 
     let isPassed = true;
 
@@ -175,7 +216,9 @@ function checkArr(func) {
         const objToCheck = { arr: array, cell: array[i] };
 
         // возвращает либо число либо массив
-        const probableValue = func.call(this, objToCheck);
+        const probableValue = func.call(this, objToCheck, flag); // candidatesToCell
+
+        if (typeof probableValue == 'number') isPassed = true;
 
         // установить возможное значение для 1-ой пустой ячейки из карты чисел
         array[i].value = probableValue;
@@ -186,8 +229,41 @@ function checkArr(func) {
   }
 }
 
+// сравнивает текущую числовую карту с предыдущей
+// после каждой итерации repeater
+function scannerArrExtended(origin) {
+
+  // снимок текущей числовой карты
+  let snapshotMap = null;
+  let currentFlag = false;
+
+  // обертка для scannerArr
+  return function (...args) {
+
+    let [map, handler, flag] = args;
+
+    const result = origin.call(this, map, handler, currentFlag);  // функция scannerArr
+
+    const currentMap = JSON.stringify(map);
+
+    if (result === false && currentMap === snapshotMap) {
+
+      // если числовая карта повторяется и решение не найдено
+      // попытаться найти решение с анализатором
+      currentFlag = true;
+
+    } else currentFlag = false;
+
+    snapshotMap = currentMap;
+
+    return result;
+  }
+}
+
+const scannerExtended = scannerArrExtended(scannerArr);
+
 // функция-повторитель для поиска решения
 // n - максимальное количество итераций поиска
-const multipleScaner = repeater(scanerArr, 100);
+const multipleScaner = repeater(scannerExtended, 100);
 
-export { createTask, scanerArr, deleteNumbers };
+export { createTask, scannerArr, deleteNumbers, exceptNumbers };
