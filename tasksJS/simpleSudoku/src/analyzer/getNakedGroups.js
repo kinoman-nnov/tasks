@@ -16,7 +16,7 @@ export function getNakedGroups(complex) {
 
   // проверить на наличие null в таблице
   // если null найден, исключить кандидатов не удастся, прервать выполнение
-  if (!hasNoNull(complex)) return;
+  if (!hasNoNull(complex)) return null;
 
   const compare = (arr, elem) => {
 

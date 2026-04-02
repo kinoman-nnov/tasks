@@ -1,17 +1,21 @@
-import { hiddenPairMap, hiddenPairMap_2, hiddenThreeMap, hiddenFourMap } from './inputData/hiddenGroupsData.test.js';
-import { getHiddenGroups } from "../src/analyzer/getHiddenGroups.js";
-import { deepEqualWrapped } from './helpers.test.js';
+import {
+  hiddenPairMap,
+  hiddenPairMap_2,
+  hiddenThreesomeMap,
+  hiddenFourMap
+} from '../inputData/hiddenGroupsData.test.js';
+import { getHiddenGroups } from "../../src/analyzer/getHiddenGroups.js";
+import { deepEqualWrapped } from '../helpers.test.js';
 
 // копия входного объекта
-const instanceHiddenPairs = structuredClone(hiddenPairMap);
-const instanceHiddenPairs_2 = structuredClone(hiddenPairMap_2);
-const instanceHiddenThreesome = structuredClone(hiddenThreeMap);
-const mapInstanceFours = structuredClone(hiddenFourMap);
+const instanceHiddenPair = structuredClone(hiddenPairMap);
+const instanceHiddenPair_2 = structuredClone(hiddenPairMap_2);
+const instanceHiddenThreesome = structuredClone(hiddenThreesomeMap);
+const instanceHiddenFour = structuredClone(hiddenFourMap);
 
-// arrX, arrY - строка sectionX0.row0 и столбец sectionY0.column2
-const { objToCheck: hiddenPair } = instanceHiddenPairs;
-const { arrX: hiddenThreesome } = instanceHiddenThreesome;
-const { objToCheck: hiddenFour } = mapInstanceFours;
+const { objToCheck: hiddenPairObj } = instanceHiddenPair;
+const { arrX: hiddenThreesomeArr } = instanceHiddenThreesome;
+const { objToCheck: hiddenFourObj } = instanceHiddenFour;
 
 describe("Анализатор. Поиск скрытых групп", function () {
 
@@ -31,7 +35,7 @@ describe("Анализатор. Поиск скрытых групп", function 
 
     it("Скрытая пара [2, 4]", function () {
 
-      const hiddenPairItem = getHiddenGroups(hiddenPair.arr);
+      const hiddenPairItem = getHiddenGroups(hiddenPairObj.arr);
 
       const result = [2, 4];
       // при сравнении не учитывается порядок элементов
@@ -45,7 +49,7 @@ describe("Анализатор. Поиск скрытых групп", function 
 
     it("Скрытая тройка [2, 5, 6]", function () {
 
-      const hiddenThreeItem = getHiddenGroups(hiddenThreesome);
+      const hiddenThreeItem = getHiddenGroups(hiddenThreesomeArr);
 
       const result = [2, 5, 6];
       // при сравнении не учитывается порядок элементов
@@ -59,7 +63,7 @@ describe("Анализатор. Поиск скрытых групп", function 
 
     it("Скрытая четверка [1, 4, 6, 9]", function () {
 
-      const hiddenFourItem = getHiddenGroups(hiddenFour.arr);
+      const hiddenFourItem = getHiddenGroups(hiddenFourObj.arr);
   
       const result = [1, 4, 6, 9];
       // при сравнении не учитывается порядок элементов

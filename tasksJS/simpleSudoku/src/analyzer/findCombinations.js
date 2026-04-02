@@ -1,6 +1,6 @@
 import { sortByArrLength } from '../helpers.js';
 
-export function findComb(cplx, compare) {
+export function findComb(cplx, compare, isSingle) {
   // пропустить пустые ячейки и числа
   const arrays = cplx.filter((item) => {
     if (!Array.isArray(item.value)) return;
@@ -27,7 +27,11 @@ export function findComb(cplx, compare) {
       
       sorted[i][j].value.forEach(num => elemCache.add(num)); // добавить в кэш elem
 
-      const compareObj = compare(arrays, sorted[i][j]);
+      let compareObj;
+
+      if (isSingle === true) compareObj = compare(cplx, sorted[i][j]);
+
+      else compareObj = compare(arrays, sorted[i][j]);
 
       if (compareObj.group.length === 0) continue;
       // если группа найдена, прекратить поиск

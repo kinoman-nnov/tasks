@@ -19,10 +19,15 @@ const createMapNumbersTimer = runTime(createMapNumbers);
 
 const numbersMap = createMapNumbersTimer(arrData, size);
 
-// количество попыток затраченное на подбор решения repeater-ом
-console.log('попыток: ' + createMapNumbersCounter.calls);
-
 describe("Числовая карта", function () {
+  
+  before(() => {
+
+    // время, затраченное на создание задачи
+    console.log('=====> Время выполнения: ' + numbersMap.time + 'ms');
+    // количество попыток затраченное на подбор решения repeater-ом
+    console.log('=====> Попыток: ' + createMapNumbersCounter.calls);
+  });
 
   describe("Сумма ряда по оси Х", function () {
 

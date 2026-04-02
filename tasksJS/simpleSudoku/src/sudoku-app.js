@@ -2,18 +2,9 @@ import { inputData } from './inputData.js';
 import { runTime } from './helpers.js';
 
 import { createMapNumbers, createMapNumbersCounter } from './createMapNumbers.js';
-import { createTask, deleteNumbers, scannerArr, exceptNumbers, iterationNum } from './createTask.js';
+import { createTask, deleteNumbers, scannerArr } from './createTask.js';
 
-// Входные данные:
-// массив данных, размер таблиц
-// const arrData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
-// const size = 4;
-
-// const arrData = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-// const size = 3;
-
-// const arrData = [1, 2, 3, 4];
-// const size = 2;
+import { mapNumbersTest } from '../tests/inputData/solutionMap.test.js'
 
 const { arrData, size, difficulty } = inputData;
 
@@ -115,6 +106,9 @@ try {
 
   // количество попыток затраченное на подбор решения repeater-ом
   console.log('попыток: ' + createMapNumbersCounter.calls);
+  console.log('время выполнения: ' + numbersMap.time,'ms');
+
+  // const numbersMap = mapNumbersTest;
 
   if (!numbersMap) throw new Error("Try again!");
 
@@ -125,8 +119,8 @@ try {
   const task = createTaskEvaluation(arrData, numbersMap, difficulty);
 
   console.log('Количество пустых ячеек: ' + deleteNumbers.size);
-  console.log('Количество неудач: ' + exceptNumbers.size);
   console.log('вызовов scanerArr: ' + scannerArr.calls);
+  console.log('время выполнения: ' + task.time, 'ms');
 
   // отобразить на странице задачу
   renderTableSudoku(sudokuElem, numbersMap, size);

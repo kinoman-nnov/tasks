@@ -1,16 +1,20 @@
-import { nakedPairMap, nakedThreesomeMap, nakedFourMap } from './inputData/nakedGroupsData.test.js';
-import { getNakedGroups } from '../src/analyzer/getNakedGroups.js';
-import { deepEqualWrapped } from './helpers.test.js';
+import {
+  nakedPairMap, 
+  nakedThreesomeMap, 
+  nakedFourMap 
+} from '../inputData/nakedGroupsData.test.js';
+import { getNakedGroups } from '../../src/analyzer/getNakedGroups.js';
+import { deepEqualWrapped } from '../helpers.test.js';
 
 // копия входного объекта
-const instanceNakedPairs = structuredClone(nakedPairMap);
+const instanceNakedPair = structuredClone(nakedPairMap);
 const instanceNakedThreesome = structuredClone(nakedThreesomeMap);
-const instanceNakedFours = structuredClone(nakedFourMap);
+const instanceNakedFour = structuredClone(nakedFourMap);
 
 // arrX, arrY - строка sectionX0.row0 и столбец sectionY0.column2
-const { arrX: nakedPair} = instanceNakedPairs;
-const { arrX: nakedThreesome } = instanceNakedThreesome;
-const { objToCheck: nakedFour } = instanceNakedFours;
+const { arrX: nakedPairArr} = instanceNakedPair;
+const { arrX: nakedThreesomeArr } = instanceNakedThreesome;
+const { objToCheck: nakedFourObj } = instanceNakedFour;
 
 describe("Анализатор. Поиск <<голых>> групп", function () {
 
@@ -18,7 +22,7 @@ describe("Анализатор. Поиск <<голых>> групп", function 
 
     it("<<Голая>> пара [1, 6]", function () {
 
-      const nakedPairItem = getNakedGroups(nakedPair);
+      const nakedPairItem = getNakedGroups(nakedPairArr);
 
       const result = [1, 6];
       // при сравнении не учитывается порядок элементов
@@ -32,7 +36,7 @@ describe("Анализатор. Поиск <<голых>> групп", function 
     
     it("<<Голая>> тройка [5, 8, 9]", function () {
 
-      const hiddenThreeItem = getNakedGroups(nakedThreesome);
+      const hiddenThreeItem = getNakedGroups(nakedThreesomeArr);
 
       const result = [5, 8, 9];
       // при сравнении не учитывается порядок элементов
@@ -47,7 +51,7 @@ describe("Анализатор. Поиск <<голых>> групп", function 
 
     it("<<Голая>> четверка [1, 5, 6, 8]", function () {
 
-      const hiddenFourItem = getNakedGroups(nakedFour.arr);
+      const hiddenFourItem = getNakedGroups(nakedFourObj.arr);
 
       const result = [1, 5, 6, 8];
       // при сравнении не учитывается порядок элементов

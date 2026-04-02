@@ -13,7 +13,7 @@ function repeater(func, n = 100) {
         k++;
 
         result = func.apply(this, arguments);
-
+        
       } while ((result === undefined || result === '' || result === false || result === 0 || result === null) && (k < n));
 
       if (k == n) return result || null;
@@ -33,7 +33,7 @@ function repeater(func, n = 100) {
 function scannerArr(item, func, flag) {
 
   // прервать выполнение, чтобы не превысить максимальный размер стека вызовов
-  if (scannerArr.calls > 50000) throw new Error('Превышено количество вызовов scanner!');
+  if (scannerArr.calls > 20000) throw new Error('Превышено количество вызовов scanner!');
 
   if (Array.isArray(item)) {
 
@@ -72,7 +72,9 @@ function runTime(func) {
     const result = func.apply(this, arguments);
 
     let end = Date.now() - start;
-    console.log('Время выполнения: ' + end + 'ms');
+
+    // console.log('Время выполнения: ' + end + 'ms');
+    result.time = end;
 
     return result;
   }
@@ -112,10 +114,19 @@ function exceptionArr(dataArr, arrX, arrY, matrix) {
   return exceptXYMatrix;
 }
 
-// случайное целое
+// случайное целое, включая min и max
 function randomInteger(min, max) {
   let rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
+}
+
+// фунция выбирает случайное число из массива arr, уменьшая его длину
+function getRandomNum(arr) {
+  const numInd = Math.floor(Math.random() * arr.length);
+
+  const roll = arr.splice(numInd, 1);
+
+  return roll[0];
 }
 
 // функция принимает объект и путь к свойству в виде строки и возвращает его значение
@@ -182,6 +193,7 @@ export {
   groupBy,
   sortByArrLength,
   randomInteger,
+  getRandomNum,
   accessToProp,
   hasNoNull,
   runTime,

@@ -2,17 +2,9 @@ import {
   createObj as Section,
   exceptionArr as getArrayProbableValues,
   repeater,
+  getRandomNum,
   counter
 } from './helpers.js';
-
-// фунция выбирает случайное число из массива arr, уменьшая массив
-function getRandomNum(arr) {
-  const numInd = Math.floor(Math.random() * arr.length);
-
-  const roll = arr.splice(numInd, 1);
-
-  return roll[0];
-}
 
 // i-ая таблица чисел (i-ая секция)
 // функция возвращает массив чисел i-ой таблицы
@@ -44,8 +36,6 @@ function createTableNumbers(arr, sectionX, sectionY, tableId, size) {
       let cell = {
         value: num,
         address: {
-          // sectionX: sectionX.path,
-          // sectionY: sectionY.path,
           axisX: sectionX.path + '.row' + i,
           axisY: sectionY.path + '.column' + j,
           innerTableId: tableId
