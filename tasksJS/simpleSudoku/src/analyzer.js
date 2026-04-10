@@ -42,13 +42,13 @@ export function analyzeCandidates(obj, map) {
   }
   
   const runWithHiddenSingle = run(getHiddenSingle);
-  const runWithNakedGroups = run(getNakedGroups);
   const runWithHiddenGroups = run(getHiddenGroups);
+  const runWithNakedGroups = run(getNakedGroups);
   const runWithPointingGroups = run(getPointingGroups);
 
   runWithHiddenSingle(table, arrX, arrY);
-  runWithNakedGroups(table, arrX, arrY);
   runWithHiddenGroups(table, arrX, arrY);
+  runWithNakedGroups(table, arrX, arrY);
   runWithPointingGroups(table, arrX, arrY);
 
   return cell.value;

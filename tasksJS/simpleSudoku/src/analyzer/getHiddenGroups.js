@@ -67,6 +67,7 @@ export function getHiddenGroups(complex) {
 
     // рекурсивно отфильтровать элементы с синглами
     const filteredMatches = (arr) => {
+
       let resultArr = [];
       let hasSingles = false;
       for (const el of arr) {
@@ -80,7 +81,8 @@ export function getHiddenGroups(complex) {
             hasSingles = true;
             continue;
           default:
-            resultArr.push(el);
+            const hasCommonItem = filteredArr.some(item => elem.value.includes(item));
+            if (hasCommonItem) resultArr.push(el);
         }
       }
       if (hasSingles === true) resultArr = filteredMatches(resultArr);
@@ -100,7 +102,7 @@ export function getHiddenGroups(complex) {
     return comb;
   }
 
-  const hiddenGroup = findComb(complex, compare);
+  const hiddenGroup = findComb(complex, compare, false);
 
   return hiddenGroup;
 }

@@ -97,6 +97,8 @@ function renderTableSudoku(elem, numbersMap, size = 3) {
   }
 }
 
+let timerId;
+
 try {
   console.log('// Решение //');
 
@@ -125,10 +127,21 @@ try {
   // отобразить на странице задачу
   renderTableSudoku(sudokuElem, numbersMap, size);
 
+  // stress-test
+  // циклическая перезагрузка страницы
+  // timerId = setTimeout(function run() {
+  //   location.reload();
+  //   timerId = setTimeout(run, 0);
+  // }, 0);
+
 } catch (err) {
   const text = document.createElement('h1');
   text.innerHTML = err.message;
 
+  if (!!err.message) {
+    clearTimeout(timerId);
+  }
+  
   console.log(err);
 
   sudokuElem.appendChild(text);

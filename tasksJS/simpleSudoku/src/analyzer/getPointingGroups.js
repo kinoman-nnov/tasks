@@ -95,7 +95,7 @@ export function getPointingGroups(complex) {
     return comb;
   }
 
-  const pointingGroup = findComb(complex, compare);
+  const pointingGroup = findComb(complex, compare, false);
 
   return pointingGroup;
 }

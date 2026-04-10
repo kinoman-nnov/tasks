@@ -1,87 +1,138 @@
-/* html
-{
-	font-family:sans-serif;
-	line-height:1.15;
-	-ms-text-size-adjust:100%;
-	-webkit-text-size-adjust:100%
+* {
+	box-sizing: border-box;
 }
 
-hr
-{
-	box-sizing:content-box;
-	height:0;
-	overflow:visible
+body {
+	margin: 0;
+	font-family: system-ui, -apple-system, sans-serif;
+	background: #f4f6f8;
+	color: #222;
 }
 
-pre,code
-{
-	font-family:monospace,monospace;
-	font-size:1em
-} */
-
-/* a
-{
-	-webkit-text-decoration-skip:objects
+.panel {
+	display: flex;
+	flex-direction: column;
+	max-width: 500px;
+  margin: 30px auto;
+  padding: 20px 24px;
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-sub,sup
-{
-	font-size:75%;
-	line-height:0;
-	position:relative;
-	vertical-align:baseline
+.title {
+	margin: 0;
+	font-size: 24px;
+	font-weight: 700;
+	text-align: center;
+	margin-bottom: 20px;
 }
 
-sub
-{
-	bottom:-.25em
+.controls {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
 }
 
-sup
-{
-	top:-.5em
+.form__header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
 }
 
-svg:not(:root)
-{
-	overflow:hidden
+.form__icon {
+	width: 28px;
+  height: 28px;
+	opacity: 0.7;
+	transition: opacity 0.2s ease;
 }
 
-button,input,optgroup,select,textarea
-{
-	font-family:sans-serif;
-	font-size:100%;
-	line-height:1.15;
-	margin:0;
-  text-transform:none;
+.icon--settings {
+	opacity: 1;
 }
 
-button,input
-{
-	overflow:visible
+.section {
+	display: flex;
+	flex-direction: column;
+	background: #f8fafc;
+	padding: 14px 14px;
+	border-radius: 12px;
+	margin-bottom: 16px;
+	border: 1px solid #e5e7eb;
 }
 
-button,html [type="button"],
-[type="reset"],[type="submit"]
-{
-	-webkit-appearance:button
+.section .options {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
 }
 
-button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner
-{
-	border-style:none;
-	padding:0
+.options label {
+	flex: 1;
+	justify-content: center;
 }
 
-button:-moz-focusring,[type="button"]:-moz-focusring,[type="reset"]:-moz-focusring,[type="submit"]:-moz-focusring
-{
-	outline:1px dotted ButtonText
+.section p{
+	margin: 0 0 10px;
+	font-weight: 600;
+	font-size: 14px;
+	color: #444;
 }
 
-textarea
-{
-	overflow:auto
-} */
+.section label{
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-bottom: 6px;
+	cursor: pointer;
+	padding: 6px 10px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	background: #fff;
+	transition: all 0.2s ease;
+}
+
+.section label:hover {
+	background: #eef2ff;
+	border-color: #c7d2fe;
+}
+
+.section input[type="radio"] {
+	accent-color: #4f46e5; /* покрасить */
+}
+
+.section input[type="radio"]:checked,
+.section label:has(input:checked) {
+	background: #4f46e5;
+	color: white;
+	border-color: 4f46e5;
+}
+
+.form__button {
+	width: 100%;
+	padding: 12px;
+	font-size: 16px;
+	font-weight: 600;
+	border: none;
+	border-radius: 10px;
+	background: #4f46e5;
+	color: white;
+	cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.form__button:hover {
+  background: #4338ca;
+}
+
+.form__button:active {
+  transform: scale(0.98);
+}
+
+#sudoku-app {
+	max-width: 500px;
+  margin: 20px auto;
+}
 
 .mainTable {
   width: 400px;

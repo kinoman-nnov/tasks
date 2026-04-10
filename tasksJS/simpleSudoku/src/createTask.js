@@ -137,10 +137,8 @@ function createTask(arr, map, difficulty = 1) {
     }
 
   } catch (err) {
-
-    console.log(map);
     // console.log("%c" + err, "color:red");
-    console.log(err);
+    throw err;
   }
 
   return map;

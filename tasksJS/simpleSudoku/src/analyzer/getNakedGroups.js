@@ -45,7 +45,7 @@ export function getNakedGroups(complex) {
     return comb;
   }
 
-  const nakedGroup = findComb(complex, compare);
+  const nakedGroup = findComb(complex, compare, false);
 
   return nakedGroup;
 }
