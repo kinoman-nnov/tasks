@@ -74,7 +74,7 @@ function runTime(func) {
     let end = Date.now() - start;
 
     // console.log('Время выполнения: ' + end + 'ms');
-    result.time = end;
+    if (!!result) result.time = end;
 
     return result;
   }
@@ -129,6 +129,17 @@ function getRandomNum(arr) {
   return roll[0];
 }
 
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1)); // случайный индекс от 0 до i
+
+    // поменять элементы местами
+    // let t = array[i]; array[i] = array[j]; array[j] = t
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 // функция принимает объект и путь к свойству в виде строки и возвращает его значение
 function accessToProp(obj, path) {
   // accumulator = key, currentValue из массива = prop, initialValue = obj
@@ -178,7 +189,12 @@ function counter(func) {
 
     return func.apply(this, arguments);
   }
+
   wrap.calls = count;
+  wrap.reset = function() {
+    count = 0;
+    wrap.calls = 0;
+  }
   return wrap;
 }
 
@@ -194,6 +210,7 @@ export {
   sortByArrLength,
   randomInteger,
   getRandomNum,
+  shuffle,
   accessToProp,
   hasNoNull,
   runTime,

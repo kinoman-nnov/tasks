@@ -1,14 +1,10 @@
-import { inputData } from './inputData.js';
+// import { inputData } from './inputData.js';
 import { runTime } from './helpers.js';
 
 import { createMapNumbers, createMapNumbersCounter } from './createMapNumbers.js';
 import { createTask, deleteNumbers, scannerArr } from './createTask.js';
 
-import { mapNumbersTest } from '../tests/inputData/solutionMap.test.js'
-
-const { arrData, size, difficulty } = inputData;
-
-const sudokuElem = document.getElementById('sudoku-app');
+import { mapNumbersTest } from '../tests/inputData/solutionMap.test.js';
 
 // функция создает таблицу и добавляет ее в elem
 function renderTable(elem, data, size = 3) {
@@ -31,13 +27,34 @@ function renderTable(elem, data, size = 3) {
 
       data.cellIndex = ind;
 
+      let val;
+
+      switch (data.state) {
+        case 'outer':
+          val = null;
+
+          cell.innerHTML = val;
+          break;
+
+        case 'inner':
+          val = data.arr[ind].value;
+
+          // фон пустым ячейкам
+          if (val == null) {
+            cell.classList.add('mark');
+
+            // insertLayout(cell);
+          }
+          // else cell.innerHTML = val;
+          break;
+      }
+
       // функция вставки содержимого в ячейку
-      const value = insertValue(data);
+      // const value = insertValue(data);
 
-      // условие задает фон пустым ячейкам
-      if (value == null && data.state == 'inner') cell.classList.add('mark');
+      // insertLayout(cell);
 
-      cell.innerHTML = value;
+      cell.innerHTML = val;
 
       ind++;
     }
@@ -59,6 +76,13 @@ function insertValue(data) {
   const num = arr[cellIndex].value;
 
   return num;
+}
+
+function insertLayout(cell) {
+  const inputEl = document.createElement('input');
+  inputEl.type = 'number';
+  inputEl.maxLength = 1;
+  cell.appendChild(inputEl);
 }
 
 function renderTableSudoku(elem, numbersMap, size = 3) {
@@ -97,52 +121,63 @@ function renderTableSudoku(elem, numbersMap, size = 3) {
   }
 }
 
-let timerId;
+export default function sudokuApp(config, sudokuElem) {
 
-try {
-  console.log('// Решение //');
+  // сбросить предыдущую разметку, счетчик и логи
+  sudokuElem.innerHTML = '';
+  console.clear();
+  // let timerId;
 
-  // посчитать время выполнения, затраченное на поиск числовой карты
-  const createMapNumbersEvaluation = runTime(createMapNumbers);
-  const numbersMap = createMapNumbersEvaluation(arrData, size);
+  const { arrData, size, difficulty } = config;
 
-  // количество попыток затраченное на подбор решения repeater-ом
-  console.log('попыток: ' + createMapNumbersCounter.calls);
-  console.log('время выполнения: ' + numbersMap.time,'ms');
+  try {
+    console.log('// Решение //');
 
-  // const numbersMap = mapNumbersTest;
+    // посчитать время выполнения, затраченное на поиск числовой карты
+    const createMapNumbersEvaluation = runTime(createMapNumbers);
+    const numbersMap = createMapNumbersEvaluation(arrData, size);
 
-  if (!numbersMap) throw new Error("Try again!");
+    if (!numbersMap) throw new Error("Числовая карта не найдена");
 
-  console.log('\n// Задача //');
+    // количество попыток затраченное на подбор решения repeater-ом
+    console.log('попыток: ' + createMapNumbersCounter.calls);
+    console.log('время выполнения: ' + numbersMap.time, 'ms');
 
-  // посчитать время выполнения, затраченное на поиск задачи
-  const createTaskEvaluation = runTime(createTask);
-  const task = createTaskEvaluation(arrData, numbersMap, difficulty);
+    // const numbersMap = mapNumbersTest;
 
-  console.log('Количество пустых ячеек: ' + deleteNumbers.size);
-  console.log('вызовов scanerArr: ' + scannerArr.calls);
-  console.log('время выполнения: ' + task.time, 'ms');
+    console.log('\n// Задача //');
 
-  // отобразить на странице задачу
-  renderTableSudoku(sudokuElem, numbersMap, size);
+    // посчитать время выполнения, затраченное на поиск задачи
+    const createTaskEvaluation = runTime(createTask);
+    const task = createTaskEvaluation(arrData, numbersMap, difficulty);
 
-  // stress-test
-  // циклическая перезагрузка страницы
-  // timerId = setTimeout(function run() {
-  //   location.reload();
-  //   timerId = setTimeout(run, 0);
-  // }, 0);
+    console.log('Количество пустых ячеек: ' + deleteNumbers.size);
+    console.log('вызовов scanerArr: ' + scannerArr.calls);
+    console.log('время выполнения: ' + task.time, 'ms');
 
-} catch (err) {
-  const text = document.createElement('h1');
-  text.innerHTML = err.message;
+    // отобразить на странице задачу
+    renderTableSudoku(sudokuElem, numbersMap, size);
 
-  if (!!err.message) {
-    clearTimeout(timerId);
+    // stress-test
+    // циклическая перезагрузка страницы
+    // timerId = setTimeout(function run() {
+    //   location.reload();
+    //   timerId = setTimeout(run, 0);
+    // }, 0);
+
+    return task;
+
+  } catch (err) {
+
+    const text = document.createElement('h1');
+    text.innerHTML = err.message;
+
+    // if (!!err.message) {
+    //   clearTimeout(timerId);
+    // }
+
+    console.log(err);
+
+    sudokuElem.appendChild(text);
   }
-  
-  console.log(err);
-
-  sudokuElem.appendChild(text);
 }

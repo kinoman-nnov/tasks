@@ -10,7 +10,8 @@ import {
 } from './helpers.js';
 import { analyzeCandidates } from './analyzer.js';
 
-const { arrCells } = inputData;
+let deleteNumbers;
+let exceptNumbers;
 
 // Сложность I = 0 (30-35 подсказок), I = 1 (25-30 подсказок), I = 2 (20-25 подсказок)
 
@@ -20,12 +21,14 @@ const { arrCells } = inputData;
 // 3. Удалить n
 // 4. Посчитать решения, если оно не единственное, вернуть n обратно
 
-// коллекция удаленных значений из числовой карты
-let deleteNumbers = new Map();
-// коллекция значений, с которыми не найдено решение
-let exceptNumbers = new Map();
-
 function createTask(arr, map, difficulty = 1) {
+
+  const { arrCells } = inputData;
+
+  // коллекция удаленных значений из числовой карты
+  deleteNumbers = new Map();
+  // коллекция значений, с которыми не найдено решение
+  exceptNumbers = new Map();
 
   // копия созданной числовой карты решения задачи
   const originMap = JSON.stringify(map.mainTable);
@@ -37,7 +40,7 @@ function createTask(arr, map, difficulty = 1) {
       n = 46;
       break;
     case 1:
-      n = 56;
+      n = 51;
       break;
     case 2:
       n = 61;

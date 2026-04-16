@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Sudoku App</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="panel">
+      <h1 class="title">Simple Sudoku Generator</h1>
+      <form class="controls">
+        <div class="section form__header drop-down__toggle">
+          <div class="drop-down--left">
+            <svg class="form__icon icon--settings" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
+              </path>
+            </svg>
+            <h3 class="form__title">Settings</h3>
+          </div>
+          <div class="drop-down--right">
+            <svg class="form__icon icon--drop-down" viewBox="0 0 20 15" xmlns="http://www.w3.org/2000/svg"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M 0.7929688 5 L 10 14.207031 L 19.207031 5 L 0.7929688 5 z M 3.2070312 6 L 16.792969 6 L 10 12.792969 L 3.2070312 6 z " />
+            </svg>
+          </div>
+        </div>
+        <div class="section form__content drop-down__menu">
+          <div class="section form__grid">
+            <p>Размер</p>
+            <div class="options">
+              <label class="radio">
+                <input type="radio" name="size" value="2" class="radio__elem"></input>
+                <div class="radio__title">2x2</div>
+              </label>
+              <label class="radio">
+                <input type="radio" name="size" value="3" class="radio__elem" checked></input>
+                <div class="radio__title">3x3</div>
+              </label>
+              <!-- <label class="radio">
+                <input type="radio" name="size" value="4" class="radio__elem"></input>
+                <div class="radio__title">4x4</div>
+              </label> -->
+            </div>
+          </div>
+          <div class="section form__difficulty">
+            <p>Сложность</p>
+            <div class="options">
+              <label class="radio">
+                <input type="radio" name="difficulty" value="0" class="radio__elem"></input>
+                <div class="radio__title">Легкий</div>
+              </label>
+              <label class="radio">
+                <input type="radio" name="difficulty" value="1" class="radio__elem" checked></input>
+                <div class="radio__title">Средний</div>
+              </label>
+              <label class="radio">
+                <input type="radio" name="difficulty" value="2" class="radio__elem"></input>
+                <div class="radio__title">Сложный</div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <button type="button" id="startBtn" class="form__button btn">Создать</button>
+      </form>
+    </div>
+
+    <div id="app-container"></div>
+  </div>
+</body>
+
+</html>

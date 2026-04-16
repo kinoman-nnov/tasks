@@ -15,6 +15,7 @@
     "chai": "^5.2.0",
     "css-loader": "^7.1.2",
     "html-webpack-plugin": "^5.6.3",
+    "mini-css-extract-plugin": "^2.10.2",
     "mocha": "^11.7.5",
     "style-loader": "^4.0.0",
     "webpack": "^5.99.9",

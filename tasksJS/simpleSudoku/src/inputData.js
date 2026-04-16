@@ -1,7 +1,24 @@
 const inputData = {
   // "arrData": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-  "size": 3,
-  "difficulty": 2,
+  // "size": 3,
+  // "difficulty": 2,
+  _size: 3,
+  _difficulty: 2,
+
+  get size() {
+    return this._size;
+  },
+  get difficulty() {
+    return this._difficulty;
+  },
+
+  set size(value) {
+    this._size = value;
+  },
+  set difficulty(value) {
+    this._difficulty = value;
+  },
+
   get arrData() {
     const n = this.size ** 2;
     // Генерирования последовательности чисел 

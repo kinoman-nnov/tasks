@@ -1,0 +1,159 @@
+.panel {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+  margin: 26px auto;
+  padding: 20px 24px;
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+	margin: 0;
+	font-size: 24px;
+	font-weight: 700;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.controls {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.form__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.drop-down--left {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.form__icon {
+	width: 28px;
+  height: 28px;
+	color: #444;
+	transition: opacity 0.2s ease;
+}
+
+.section {
+	display: flex;
+	flex-direction: column;
+	background: #f8fafc;
+	padding: 14px 14px;
+	border-radius: 12px;
+	border: 1px solid #e5e7eb;
+}
+
+.section .form__title {
+	margin: 0;
+}
+
+.drop-down__toggle {
+	flex-direction: row;
+	padding: 5px 10px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.drop-down__toggle:hover {
+	opacity: .9;
+	background: #878787;
+}
+
+.drop-down__menu {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 5px;
+	background: #fff;
+}
+
+.drop-down__menu.menu--hidden{
+	display: none;
+}
+
+.section .options {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.options label {
+	flex: 1;
+	justify-content: center;
+}
+
+.locked-group label {
+	cursor: not-allowed;
+	color: #666;
+}
+
+.section p{
+	margin: 0 0 10px;
+	font-weight: 600;
+	font-size: 14px;
+	color: #444;
+}
+
+.section label{
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-bottom: 6px;
+	cursor: pointer;
+	padding: 6px 10px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	background: #fff;
+	transition: all 0.2s ease;
+}
+
+.section label:hover {
+	background: #eef2ff;
+	border-color: #c7d2fe;
+}
+
+.section input[type="radio"] {
+	accent-color: #CCCCCF; /* покрасить */
+}
+
+.section input[type="radio"]:checked,
+.section label:has(input:checked) {
+	background: #CCCCCF;
+	color: white;
+	border-color: #CCCCCF;
+}
+
+.section input[type="radio"]:disabled,
+.section label:has(input:disabled) {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.form__button {
+	width: 100%;
+	padding: 12px;
+	font-size: 16px;
+	font-weight: 600;
+	border: none;
+	border-radius: 10px;
+	background: #CCCCCF;
+	color: white;
+	cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.form__button:hover {
+  background: #878787;
+}
+
+.form__button:active {
+  transform: scale(0.98);
+}
