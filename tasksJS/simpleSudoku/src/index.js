@@ -1,9 +1,9 @@
 import "./styles.css";
 
-// import "./sudoku-app";
-import sudokuApp from "./sudoku-app";
-import { inputData } from "./inputData";
-import { scannerArr } from "./helpers";
+import { inputData } from "./inputData.js";
+import { scannerArr } from "./helpers.js";
+import sudokuApp from "./sudoku-app.js";
+import userInputGrig from "./userInputGrid.js"
 
 // Функция очистки состояния
 function cleanup(app) {
@@ -93,6 +93,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     currentApp = sudokuApp(inputData, sudokuElem);
 
-    if (currentApp) appIsRunning = false;
+    if (currentApp) {
+      appIsRunning = false;
+
+      userInputGrig(sudokuElem)
+    }
   });
 });

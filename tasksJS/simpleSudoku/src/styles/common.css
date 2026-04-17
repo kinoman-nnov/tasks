@@ -20,5 +20,25 @@ body {
 }
 
 input {
-	margin: 0
+	margin: 0;
+}
+
+/* убрать стрелки для type="number" */
+input[type="text"] {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: textfield;
+
+	border: none;
+	outline: none;
+	background: transparent;
+	box-shadow: none;
+
+	padding: 0;
+	margin: 0;
+
+	font: inherit;
+	color: inherit;
+	
+	border-radius: 0;
 }

@@ -27,34 +27,26 @@ function renderTable(elem, data, size = 3) {
 
       data.cellIndex = ind;
 
-      let val;
+      let currentValue;
 
       switch (data.state) {
         case 'outer':
-          val = null;
 
-          cell.innerHTML = val;
+          cell.innerHTML = null;
           break;
 
         case 'inner':
-          val = data.arr[ind].value;
+          currentValue = data.arr[ind].value;
 
-          // фон пустым ячейкам
-          if (val == null) {
-            cell.classList.add('mark');
+          if (currentValue == null) {
+            cell.classList.add('cell-isEmpty');
 
-            // insertLayout(cell);
+            // добавить input в ячейку
+            insertInputLayout(cell);
           }
-          // else cell.innerHTML = val;
+          else cell.innerHTML = currentValue;
           break;
       }
-
-      // функция вставки содержимого в ячейку
-      // const value = insertValue(data);
-
-      // insertLayout(cell);
-
-      cell.innerHTML = val;
 
       ind++;
     }
@@ -65,24 +57,18 @@ function renderTable(elem, data, size = 3) {
   return table;
 }
 
-// функция вставляет значение в ячейку
-function insertValue(data) {
-
-  const { state, arr, cellIndex } = data;
-
-  // если таблица внешняя, ячейки пустые
-  if (state == 'outer') return null;
-
-  const num = arr[cellIndex].value;
-
-  return num;
-}
-
-function insertLayout(cell) {
+function insertInputLayout(element) {
   const inputEl = document.createElement('input');
-  inputEl.type = 'number';
-  inputEl.maxLength = 1;
-  cell.appendChild(inputEl);
+
+  inputEl.classList.add('cell-input');
+
+  inputEl.name = 'inputNumber';
+  inputEl.type = 'text';
+  // inputEl.maxLength = 1;
+  inputEl.inputMode = "numeric";
+  inputEl.autocomplete = "off";
+
+  element.appendChild(inputEl);
 }
 
 function renderTableSudoku(elem, numbersMap, size = 3) {

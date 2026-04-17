@@ -35,6 +35,10 @@
 	gap: 10px;
 }
 
+.drop-down--right {
+	opacity: 0.6;
+}
+
 .form__icon {
 	width: 28px;
   height: 28px;
