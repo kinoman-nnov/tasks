@@ -35,6 +35,7 @@ function createTableNumbers(arr, sectionX, sectionY, tableId, size) {
       // значение и адрес ячейки
       let cell = {
         value: num,
+        originValue: num,
         address: {
           axisX: sectionX.path + '.row' + i,
           axisY: sectionY.path + '.column' + j,

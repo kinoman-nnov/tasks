@@ -5,15 +5,6 @@ import { scannerArr } from "./helpers.js";
 import sudokuApp from "./sudoku-app.js";
 import userInputGrig from "./userInputGrid.js"
 
-// Функция очистки состояния
-function cleanup(app) {
-
-  // Сброс счётчиков
-  scannerArr.reset();
-
-  app = null;
-}
-
 let currentApp = null;
 let appIsRunning = false;
 
@@ -67,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     e.stopPropagation();
   });
 
-  const getInputData = () => {
+  const updateInputData = () => {
     const size = Number(document.querySelector('input[name="size"]:checked').value);
     const difficulty = Number(document.querySelector('input[name="difficulty"]:checked').value);
 
@@ -89,14 +80,41 @@ document.addEventListener('DOMContentLoaded', function () {
     // Если есть предыдущее приложение — очищаем его
     if (currentApp) cleanup(currentApp);
 
-    getInputData();
+    // обновить входные данные
+    updateInputData();
 
     currentApp = sudokuApp(inputData, sudokuElem);
 
     if (currentApp) {
       appIsRunning = false;
 
-      userInputGrig(sudokuElem)
+      sudokuElem.addEventListener('input', handlerInput);
     }
   });
+
+  function handlerInput(e) {
+
+    const inputs = document.querySelectorAll('.cell-input');
+  
+    // диапазон ввода чисел
+    const range = inputData.arrData.length;
+  
+    // выполняется пока не заполнены все ячейки
+    // возвращает true, если вся таблица заполнена правильно
+    const isComplete = userInputGrig(e, inputs, range);
+    
+    if(isComplete) console.log('complete');
+  }
+  
+  // Функция очистки состояния
+  function cleanup(app) {
+  
+    // удалить обработчики
+    sudokuElem.removeEventListener('input', handlerInput);
+  
+    // Сброс счётчиков
+    scannerArr.reset();
+  
+    app = null;
+  }
 });

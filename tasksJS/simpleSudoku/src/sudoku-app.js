@@ -37,12 +37,15 @@ function renderTable(elem, data, size = 3) {
 
         case 'inner':
           currentValue = data.arr[ind].value;
-
+          
           if (currentValue == null) {
             cell.classList.add('cell-isEmpty');
-
+            
             // добавить input в ячейку
-            insertInputLayout(cell);
+            const inputEl = insertInputLayout(cell);
+            
+            // записать исходное значение в дата атрибут
+            inputEl.dataset.originValue = data.arr[ind].originValue;
           }
           else cell.innerHTML = currentValue;
           break;
@@ -69,6 +72,8 @@ function insertInputLayout(element) {
   inputEl.autocomplete = "off";
 
   element.appendChild(inputEl);
+
+  return inputEl;
 }
 
 function renderTableSudoku(elem, numbersMap, size = 3) {
