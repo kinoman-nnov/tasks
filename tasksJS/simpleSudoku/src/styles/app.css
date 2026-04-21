@@ -36,46 +36,13 @@ td.cell-isEmpty input{
   text-align: center;
 }
 
-
-/* .mainTable {
-  width: 100%;
-  table-layout: auto;
-  border-collapse: collapse;
-}
-
-.mainTable--task {
-	opacity: .8;
-}
-
-.mainTable td, .mainTable th {
-  padding: 8px;
-  border: 1px solid #ddd;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-td.table-number-input input{
-  width: 100%;
-  box-sizing: border-box;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px
-} */
-
-
-
-
-/* td.table-number-input {
-  width: 100%;
-} */
-
-.emty {
-	
-}
-
 .cell-input {
 }
+
 .cell-input:focus {
   background: #ccc;
+}
+
+.solved {
+  background: #eaffea;
 }

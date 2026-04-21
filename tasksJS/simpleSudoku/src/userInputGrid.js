@@ -8,11 +8,11 @@ function validateCell(e, range) {
     inputValue = e.data;
 
     const regex = new RegExp(`[^1-${range}]`, 'g'); // кроме [1-range]
-  
+
     inputValue = inputValue.replace(regex, ""); // заменить пустой строкой все символы, кроме цифр
-    
+
     inputValue = inputValue.slice(0, 1);
-    
+
     e.target.value = inputValue;
   }
   // реализация для сетки 4х4 (не перезаписывает ввод, 2 символа)
@@ -36,32 +36,35 @@ function validateCell(e, range) {
   }
 }
 
-// Функция проверки заполненности всех полей,
-// вызывается после каждого события input в таблице
 function areAllFieldsFilled(inputs) {
-  // возвращает true, если все поля заполнены пhfdbkmyj
-  return Array.from(inputs).every(input => {
-    if (input.value.trim() === '') return false;
-
-    if (input.value === input.dataset.originValue) return true;
-  });
+  return Array.from(inputs).every(input => input.value.trim() !== '');
 }
 
-function checkEnteredValue(element) {
-  const getOriginValue = element.dataset.originValue;
-  // const getInputValue = 
-  console.log(e.target.value, e.target.dataset.originValue);
+function checkEnteredValues(inputs) {
+  return Array.from(inputs).every(input => input.value === input.dataset.originValue);
 }
 
 export default function userInputGrig(e, items, range) {
 
   if (e.target.classList.contains('cell-input')) {
-    
+
+    let isComplete = false;
+
     // проверить ввод, записать в ячейку
     validateCell(e, range);
 
     // проверить, заполнены ли все поля
-    const isComplete = areAllFieldsFilled(items);
+    const isFilled = areAllFieldsFilled(items);
+
+    if (isFilled) {
+      // проверить правильность заполненных полей
+      if (checkEnteredValues(items)) {
+        
+        isComplete = true;
+      }
+      // таблица заполнена неверно
+      else return 'reset';
+    }
 
     return isComplete;
   }

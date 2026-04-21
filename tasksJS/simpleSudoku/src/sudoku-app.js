@@ -67,7 +67,6 @@ function insertInputLayout(element) {
 
   inputEl.name = 'inputNumber';
   inputEl.type = 'text';
-  // inputEl.maxLength = 1;
   inputEl.inputMode = "numeric";
   inputEl.autocomplete = "off";
 

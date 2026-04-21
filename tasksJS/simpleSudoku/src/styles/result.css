@@ -1,0 +1,16 @@
+.onComplete-container {
+  padding: 20px 24px;
+}
+
+.success-message {
+  display: none;
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.reset-button {
+  display: none;
+}

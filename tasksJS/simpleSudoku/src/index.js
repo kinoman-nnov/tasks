@@ -3,7 +3,7 @@ import "./styles.css";
 import { inputData } from "./inputData.js";
 import { scannerArr } from "./helpers.js";
 import sudokuApp from "./sudoku-app.js";
-import userInputGrig from "./userInputGrid.js"
+import userInputGrid from "./userInputGrid.js"
 
 let currentApp = null;
 let appIsRunning = false;
@@ -19,6 +19,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const sizeBtns = document.querySelectorAll('input[name="size"]');
   const difficultyBtns = document.querySelectorAll('input[name="difficulty"]');
+
+  const msgOk = document.getElementById('successMessage');
+  const resetBtn = document.getElementById('resetButton');
+
+  resetBtn.addEventListener('click', handlerResetBtn);
 
   const updateDifficultyState = () => {
     const selectedSize = Array.from(sizeBtns).find(btn => btn.checked);
@@ -95,26 +100,58 @@ document.addEventListener('DOMContentLoaded', function () {
   function handlerInput(e) {
 
     const inputs = document.querySelectorAll('.cell-input');
-  
+
+    if (!inputs) return;
+
     // диапазон ввода чисел
     const range = inputData.arrData.length;
-  
+
     // выполняется пока не заполнены все ячейки
-    // возвращает true, если вся таблица заполнена правильно
-    const isComplete = userInputGrig(e, inputs, range);
-    
-    if(isComplete) console.log('complete');
+    // возвращает true, false, 'reset'
+    const isGridComplete = userInputGrid(e, inputs, range);
+
+    onComplete(isGridComplete, inputs);
   }
-  
+
+  function handlerResetBtn() {
+    const inputs = document.querySelectorAll('.cell-input');
+    inputs.forEach(input => input.value = '');
+    resetBtn.style.display = 'none';
+  }
+
+  function onComplete(value, cells) {
+    switch (value) {
+      // сетка заполнена верно
+      case true:
+        msgOk.style.display = 'block';
+        sudokuElem.classList.add('solved'); // подсветить поле
+        cells.forEach(cell => { cell.readOnly = true; }); // заблокировать ввод
+        break;
+
+      // сетка заполняется, ничего не делать
+      case false:
+        break;
+
+      // сетка заполнена неверно, предложить сбросить введеные значения
+      case 'reset':
+        resetBtn.style.display = 'block';
+        break;
+    }
+  }
+
   // Функция очистки состояния
   function cleanup(app) {
-  
-    // удалить обработчики
+    // скрыть результаты
+    msgOk.style.display = 'none';
+    resetBtn.style.display = 'none';
+
+    // удалить обработчики и аттрибуты
     sudokuElem.removeEventListener('input', handlerInput);
-  
+    if (sudokuElem.classList.contains('solved')) sudokuElem.classList.remove('solved');
+
     // Сброс счётчиков
     scannerArr.reset();
-  
+
     app = null;
   }
 });

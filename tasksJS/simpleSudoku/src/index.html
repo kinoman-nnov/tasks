@@ -32,7 +32,7 @@
         </div>
         <div class="section form__content drop-down__menu">
           <div class="section form__grid">
-            <p>Размер</p>
+            <p>Grid</p>
             <div class="options">
               <label class="radio">
                 <input type="radio" name="size" value="2" class="radio__elem"></input>
@@ -49,28 +49,37 @@
             </div>
           </div>
           <div class="section form__difficulty">
-            <p>Сложность</p>
+            <p>Difficulty</p>
             <div class="options">
               <label class="radio">
                 <input type="radio" name="difficulty" value="0" class="radio__elem"></input>
-                <div class="radio__title">Легкий</div>
+                <div class="radio__title">easy</div>
               </label>
               <label class="radio">
                 <input type="radio" name="difficulty" value="1" class="radio__elem" checked></input>
-                <div class="radio__title">Средний</div>
+                <div class="radio__title">medium</div>
               </label>
               <label class="radio">
                 <input type="radio" name="difficulty" value="2" class="radio__elem"></input>
-                <div class="radio__title">Сложный</div>
+                <div class="radio__title">hard</div>
               </label>
             </div>
           </div>
         </div>
-        <button type="button" id="startBtn" class="form__button btn">Создать</button>
+        <button type="button" id="startBtn" class="form__button btn">Create</button>
       </form>
     </div>
 
     <div id="app-container"></div>
+
+    <div class="result-container">
+      <div class="success-message" id="successMessage">
+        The table is filled in correctly!
+      </div>
+      <button type="button" class="reset-button btn" id="resetButton">
+        Reset
+      </button>
+    </div>
   </div>
 </body>
 
