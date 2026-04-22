@@ -1,5 +1,5 @@
 import {
-  createObj as Section,
+  createObj as section,
   exceptionArr as getArrayProbableValues,
   repeater,
   getRandomNum,
@@ -71,13 +71,13 @@ function createMapNumbers(arr, size = 3) {
   for (let i = 0; i < size; i++) {
 
     // i-ая секция по Х
-    numbersMap.x['sectionX' + i] = new Section(size, 'row'); // создает объект секции заданного размера
+    numbersMap.x['sectionX' + i] = section(size, 'row'); // создает объект секции заданного размера
     numbersMap.x['sectionX' + i].path = 'sectionX' + i;
 
     for (let j = 0; j < size; j++) {
 
       // j-ая секция по Y
-      if (i == 0) numbersMap.y['sectionY' + j] = new Section(size, 'column');
+      if (i == 0) numbersMap.y['sectionY' + j] = section(size, 'column');
 
       numbersMap.y['sectionY' + j].path = 'sectionY' + j;
 

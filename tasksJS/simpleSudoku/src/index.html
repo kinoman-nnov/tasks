@@ -73,12 +73,18 @@
     <div id="app-container"></div>
 
     <div class="result-container">
-      <div class="success-message" id="successMessage">
-        The table is filled in correctly!
+      <div class="result-modal" id="modal">
+        <div class="success-content">
+          <h2 class="success-message">Success!</h2>
+          <div class="result-info">
+            <p>Grid: <span id="resultScore"></span></p>
+            <p>Time: <span id="resultTime"></span></p>
+            <p>Errors: <span id="errorCount">0</span></p>
+          </div>
+          <button type="button" class="playAgain-button btn" id="playAgainBtn">New Game</button>
+        </div>
       </div>
-      <button type="button" class="reset-button btn" id="resetButton">
-        Reset
-      </button>
+      <button type="button" class="reset-button btn" id="resetButton">Reset</button>
     </div>
   </div>
 </body>

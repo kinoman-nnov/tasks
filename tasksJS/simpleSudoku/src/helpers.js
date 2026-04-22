@@ -13,7 +13,7 @@ function repeater(func, n = 100) {
         k++;
 
         result = func.apply(this, arguments);
-        
+
       } while ((result === undefined || result === '' || result === false || result === 0 || result === null) && (k < n));
 
       if (k == n) return result || null;
@@ -50,7 +50,7 @@ function scannerArr(item, func, flag) {
     for (let elem of Object.values(item)) {
 
       if (typeof elem == 'string') continue;
-      
+
       arguments[0] = elem;
 
       result = scannerArr.apply(this, arguments) && result;
@@ -82,10 +82,17 @@ function runTime(func) {
 
 // создает объект заданного размера
 function createObj(size, keyName) {
+  const obj = {};
   for (let i = 0; i < size; i++) {
-    this[keyName + i] = [];
+    obj[keyName + i] = [];
   }
+  return obj;
 }
+// function createObj(size, keyName) {
+//   for (let i = 0; i < size; i++) {
+//     this[keyName + i] = [];
+//   }
+// }
 
 // вспомогательная функция-фильтр,
 // возращает x, если такое значение отсутствует в массиве array
@@ -161,7 +168,7 @@ function groupBy(arr, key) {
   }, {});
 }
 
-function sortByArrLength (arr) {
+function sortByArrLength(arr) {
   return arr.reduce(function (acc, i) {
     (acc[i.value.length] ??= []).push(i);
     if (i.value.length > acc.maxLength) acc.maxLength = i.value.length;
@@ -191,7 +198,7 @@ function counter(func) {
   }
 
   wrap.calls = count;
-  wrap.reset = function() {
+  wrap.reset = function () {
     count = 0;
     wrap.calls = 0;
   }

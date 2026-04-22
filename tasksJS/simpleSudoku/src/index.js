@@ -7,6 +7,7 @@ import userInputGrid from "./userInputGrid.js"
 
 let currentApp = null;
 let appIsRunning = false;
+let score = {};
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -20,10 +21,18 @@ document.addEventListener('DOMContentLoaded', function () {
   const sizeBtns = document.querySelectorAll('input[name="size"]');
   const difficultyBtns = document.querySelectorAll('input[name="difficulty"]');
 
-  const msgOk = document.getElementById('successMessage');
+  const modal = document.getElementById('modal');
+  const playAgainBtn = document.getElementById('playAgainBtn');
   const resetBtn = document.getElementById('resetButton');
 
+  const scoreGridEl = document.getElementById('resultScore');
+  const scoreTimeEl = document.getElementById('resultTime');
+  const scoreErrEl = document.getElementById('errorCount');
+
   resetBtn.addEventListener('click', handlerResetBtn);
+
+  window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; }
+  playAgainBtn.onclick = () => modal.style.display = 'none';
 
   const updateDifficultyState = () => {
     const selectedSize = Array.from(sizeBtns).find(btn => btn.checked);
@@ -77,10 +86,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // запретить создание задачи, пока не выполнится предыдущая
     if (appIsRunning) return;
 
+    appIsRunning = true;
+
     // свернуть меню, после клика Создать
     if (!dropdownMenu.classList.contains('menu--hidden')) dropdownMenu.classList.toggle('menu--hidden');
-
-    appIsRunning = true;
 
     // Если есть предыдущее приложение — очищаем его
     if (currentApp) cleanup(currentApp);
@@ -88,9 +97,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // обновить входные данные
     updateInputData();
 
+    // примитивная статистика
+    score.startTime = Date.now();
+    score.size = inputData.size;
+    score.difficulty = inputData.difficulty;
+    score.errorCount = 0;
+
     currentApp = sudokuApp(inputData, sudokuElem);
 
     if (currentApp) {
+
       appIsRunning = false;
 
       sudokuElem.addEventListener('input', handlerInput);
@@ -113,19 +129,16 @@ document.addEventListener('DOMContentLoaded', function () {
     onComplete(isGridComplete, inputs);
   }
 
-  function handlerResetBtn() {
-    const inputs = document.querySelectorAll('.cell-input');
-    inputs.forEach(input => input.value = '');
-    resetBtn.style.display = 'none';
-  }
-
   function onComplete(value, cells) {
+
     switch (value) {
       // сетка заполнена верно
       case true:
-        msgOk.style.display = 'block';
+        resetBtn.style.display = 'none';
         sudokuElem.classList.add('solved'); // подсветить поле
         cells.forEach(cell => { cell.readOnly = true; }); // заблокировать ввод
+
+        showSuccessModal();
         break;
 
       // сетка заполняется, ничего не делать
@@ -135,22 +148,67 @@ document.addEventListener('DOMContentLoaded', function () {
       // сетка заполнена неверно, предложить сбросить введеные значения
       case 'reset':
         resetBtn.style.display = 'block';
+        score.errorCount++;
         break;
     }
   }
 
+  function handlerResetBtn() {
+    const inputs = document.querySelectorAll('.cell-input');
+    inputs.forEach(input => input.value = '');
+    resetBtn.style.display = 'none';
+  }
+
+  function showSuccessModal() {
+
+    const endTime = Date.now();
+
+    modal.style.display = 'flex';
+
+    const formatteDdifficulty = (level) => {
+      switch (level) {
+        case 0:
+          return 'easy';
+        case 1:
+          return 'medium';
+        case 2:
+          return 'hard';
+      }
+    }
+
+    const scoreGrid = `${score.size}x${score.size} : ${formatteDdifficulty(score.difficulty)}`;
+
+    scoreGridEl.textContent = scoreGrid;
+
+    const elapsedMs = endTime - score.startTime;
+
+    const seconds = Math.floor((elapsedMs / 1000) % 60);
+    const minutes = Math.floor((elapsedMs / (1000 * 60)) % 60);
+    const hours = Math.floor((elapsedMs / (1000 * 60 * 60)) % 24);
+
+    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+    scoreTimeEl.textContent = formattedTime;
+    scoreErrEl.textContent = score.errorCount;
+  }
+
   // Функция очистки состояния
   function cleanup(app) {
+
+    // Сброс счётчиков
+    scannerArr.reset();
+    score = {};
+
     // скрыть результаты
-    msgOk.style.display = 'none';
+    modal.style.display = 'none';
     resetBtn.style.display = 'none';
+    scoreGridEl.textContent = '';
+    scoreTimeEl.textContent = '';
+    scoreErrEl.textContent = '';
 
     // удалить обработчики и аттрибуты
     sudokuElem.removeEventListener('input', handlerInput);
     if (sudokuElem.classList.contains('solved')) sudokuElem.classList.remove('solved');
-
-    // Сброс счётчиков
-    scannerArr.reset();
 
     app = null;
   }

@@ -23,7 +23,6 @@ input {
 	margin: 0;
 }
 
-/* убрать стрелки для type="number" */
 input[type="text"] {
 	appearance: none;
 	-webkit-appearance: none;
