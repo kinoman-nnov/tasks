@@ -110,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
       appIsRunning = false;
 
       sudokuElem.addEventListener('input', handlerInput);
+      resetBtn.style.display = 'block';
     }
   });
 
@@ -136,7 +137,10 @@ document.addEventListener('DOMContentLoaded', function () {
       case true:
         resetBtn.style.display = 'none';
         sudokuElem.classList.add('solved'); // подсветить поле
-        cells.forEach(cell => { cell.readOnly = true; }); // заблокировать ввод
+        cells.forEach(cell => { 
+          cell.style.color = '#222';
+          cell.readOnly = true; // заблокировать ввод
+        });
 
         showSuccessModal();
         break;
@@ -147,16 +151,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // сетка заполнена неверно, предложить сбросить введеные значения
       case 'reset':
-        resetBtn.style.display = 'block';
         score.errorCount++;
         break;
     }
   }
 
   function handlerResetBtn() {
+    
+    let numberIsInput = false;
+
     const inputs = document.querySelectorAll('.cell-input');
-    inputs.forEach(input => input.value = '');
-    resetBtn.style.display = 'none';
+    inputs.forEach(input => {
+      if (input.value !== '') numberIsInput = true;
+      input.value = '';
+    });
+
+    if (numberIsInput) score.errorCount++;
   }
 
   function showSuccessModal() {

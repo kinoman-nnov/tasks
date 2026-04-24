@@ -34,6 +34,7 @@ td.cell-isEmpty input{
   box-sizing: border-box;
   border: 1px solid #ccc;
   text-align: center;
+  color: #2650ef;
 }
 
 .cell-input {
