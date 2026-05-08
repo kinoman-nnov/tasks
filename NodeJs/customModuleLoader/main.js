@@ -3,21 +3,21 @@ const fs = require("fs");
 let originalRequire = require;
 
 let customRequire = (moduleName) => {
-  const id = customRequire.resolve(moduleName);
 
-  if (customRequire.cache[id]) {
+  // путь до загружаемого файла
+  const pathId = customRequire.resolve(moduleName);
+
+  if (customRequire.cache[pathId]) {
     console.log('модуль загружен из кэша')
-    return customRequire.cache[id].exports;
+    return customRequire.cache[pathId].exports;
   }
 
-  const module = {
-    exports: {},
-    id: id
-  }
+  // создать объект модуль, присвоить pathId как путь до файла
+  const module = { exports: {}, pathId }
 
-  customRequire.cache[id] = module;
+  customRequire.cache[pathId] = module;
 
-  loadModule(id, module, customRequire);
+  loadModule(pathId, module, customRequire);
 
   return module.exports;
 }
@@ -43,6 +43,7 @@ function loadModule(filename, objModule, funcRequire) {
 
 customRequire.cache = {};
 
+// использовать для custom resolve оригинальный метод resolve()
 customRequire.resolve = (moduleName) => {
   return originalRequire.resolve(moduleName);
 }

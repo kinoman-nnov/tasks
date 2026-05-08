@@ -2,9 +2,11 @@ const fs = require('fs');
 const path = require('path');
  
 const base = '../NodeJs';
- 
+
+// level - уровень вложенности
 const readDir = (base, level) => {
-  const files = fs.readdirSync(base);
+
+  const files = fs.readdirSync(base); // массив имен внутри директории
  
   files.forEach(item => {
     let localBase = path.join(base, item);

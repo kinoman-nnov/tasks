@@ -31,7 +31,7 @@ const tfs = new ToFileStream({ objectMode: true });
 
 const content = fs.readFileSync("../ws.js");
 
-tfs.write({ path: "./temp/file.txt", content });
+tfs.write({ path: "./temp/file.txt", content, callback: (err) => { if (err) throw err; } });
 tfs.on("error", (err) => { });
 tfs.end(() => {
   console.log("Done!");

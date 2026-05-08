@@ -1,23 +1,20 @@
 // мой вариант
 // (Итоговое время выполнения: 4976ms)
+
 // function shuffle(arr) {
 //   let arrData = [...arr];
 //   let newArr = [];
 
 //   while (arrData.length > 0) {
 //     let rndNum = getRandonNum(arrData);
-
 //     newArr.push(rndNum);
 //   }
-
 //   return newArr;
 // }
 
 // function getRandonNum(arr) {
 //   const numInd = Math.floor(Math.random() * arr.length);
-
 //   const roll = arr.splice(numInd, 1);
-
 //   return roll[0];
 // }
 

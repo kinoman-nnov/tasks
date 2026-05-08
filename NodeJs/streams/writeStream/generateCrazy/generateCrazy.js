@@ -1,7 +1,11 @@
 const fs = require("fs");
-const Chance = require("chance");
+// const Chance = require("chance");
 
-const chance = new Chance();
+// const chance = new Chance();
+
+const FakeString = require("../../helpers/chancePolyfill.js");
+
+const chance = new FakeString();
 
 const file = fs.createWriteStream("file-stream.txt");
 
