@@ -25,13 +25,13 @@ function createServerPromisify(host, port, handler) {
   });
 }
 
-function handleTickStream(clock) {
+function handleTickStream(clock, duration) {
   const activeConnections = new Set();
 
   const closeConnections = () => {
     for (const res of activeConnections) {
       if (!res.finished) {
-        res.end('Сервер выключается.\n');
+        res.end('Сервер выключается.\nEND\n');
       }
     }
     activeConnections.clear();
@@ -56,7 +56,7 @@ function handleTickStream(clock) {
           }
         }
 
-        const disconnectClient = (res, connectionId) => {
+        const disconnectClient = () => {
           if (isDisconnected) return;
           isDisconnected = true;
           clock.off('tick', onTick);
@@ -67,7 +67,8 @@ function handleTickStream(clock) {
 
         clock.on('tick', onTick);
 
-        req.on('close', () => disconnectClient(res, connectionId));
+        res.on('finish', disconnectClient);
+        res.on('close', disconnectClient);
 
         req.on('error', (err) => {
           console.error(`Ошибка при обработке запроса от ${connectionId}:`, err);
@@ -76,15 +77,19 @@ function handleTickStream(clock) {
 
             res.end('Internal Server Error');
           }
+          disconnectClient();
         });
 
         setTimeout(() => {
-          disconnectClient(res, connectionId);
-
-          res.end(`END`);
+          if (!res.finished) {
+            res.end('END');
+          }
+          disconnectClient();
         }, duration);
 
       } catch (err) {
+        console.error(err);
+        
         res.end('FAIL');
       }
     },
@@ -92,7 +97,7 @@ function handleTickStream(clock) {
   }
 }
 
-function toggleStopwatch(clock, ms) {
+function stopClockAfter(clock, ms) {
   return new Promise((res, rej) => {
     clock.start();
 
@@ -106,18 +111,19 @@ function toggleStopwatch(clock, ms) {
 (async () => {
   const hostname = '127.0.0.1';
   const port = 3000;
+  const serverLimiteTime = 60000; // время работы сервера (1 мин) 
 
   const clock = new Clock({ template: 'hh:mm:ss', precision: interval });
 
   clock.on('tick', (time) => console.log('SERVER', time)); // логируем серверные часы
 
-  const { requestHandler, closeConnections } = handleTickStream(clock);
+  const { requestHandler, closeConnections } = handleTickStream(clock, duration);
 
   const server = await createServerPromisify(hostname, port, requestHandler);
 
-  const timer = await toggleStopwatch(clock, 60000); // ограничить работу сервера 1 мин
+  const timer = await stopClockAfter(clock, serverLimiteTime);
 
   console.log('Закрываем сервер...');
   closeConnections();
-  server.close();
+  server.close(() => console.log('Сервер остановлен.'));
 })();

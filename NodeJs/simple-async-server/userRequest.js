@@ -5,10 +5,22 @@
   try {
     let response = await fetch(`http://${hostname}:${port}`);
 
-    if (response.ok) { // если HTTP-статус в диапазоне 200-299
-      let text = await response.text();
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-      console.log(text);
+    // обработать данные как поток
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { value, done } = await reader.read();
+
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+
+      console.log(chunk);
     }
   } catch (err) {
     console.log(err);
